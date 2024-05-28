@@ -1,0 +1,2315 @@
+*************************************************************************************************************************************************
+						***** Notes Golang-20May24-to-29May24 ***** 
+*************************************************************************************************************************************************
+Day-1 | 20-05-2024 | Monday 
+==============================
+Which Golang version you are using ?
+---
+go version go1.21.1 windows/amd64
+
+Powershell:
+----------------
+cd d:
+
+cd <folder>
+
+code .
+
+Installationa and Configuration on Azure Cloud:
+==========================================
+https://azure.microsoft.com/en-in/get-started/azure-portal
+
+Useruser: azureuser
+Key: Private Key
+
+MacOS/Linux
+============
+ssh -i key.pem azureuser@Public-IP-Address/Public-DNS-Name
+
+Port:
+-------
+22
+
+https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html
+---
+putty.exe : connecting with laptop to cloud VM
+
+puttygen.exe: convert .pem to ppk
+
+pageant.exe: add your key in pageant
+
+Working with Azure Ubuntu VM:
+==============================
+azureuser@Developer1:~$ cat /etc/os-release
+NAME="Ubuntu"
+VERSION="20.04.6 LTS (Focal Fossa)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 20.04.6 LTS"
+VERSION_ID="20.04"
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+VERSION_CODENAME=focal
+UBUNTU_CODENAME=focal
+
+wget https://go.dev/dl/go1.22.3.linux-amd64.tar.gz 
+
+tar -C /usr/local -xzf go1.22.3.linux-amd64.tar.gz
+
+azureuser@Developer1:~$ sudo tar -C /usr/local -xzf go1.22.3.linux-amd64.tar.gz
+azureuser@Developer1:~$ export GOPATH=$HOME/go
+azureuser@Developer1:~$ export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+azureuser@Developer1:~$ ls -a
+.  ..  .bash_logout  .bashrc  .cache  .profile  .ssh  .sudo_as_admin_successful  .wget-hsts  go1.22.3.linux-amd64.tar.gz
+
+
+azureuser@Developer1:~$ go version
+go version go1.22.3 linux/amd64
+
+azureuser@Developer1:~$ ls
+go1.22.3.linux-amd64.tar.gz
+
+azureuser@Developer1:~$ vim hello.go
+
+azureuser@Developer1:~$ ls
+go1.22.3.linux-amd64.tar.gz  hello.go
+
+azureuser@Developer1:~$ go run hello.go
+Welcome to Goazureuser@Developer1:~$
+
+azureuser@Developer1:~$ go build hello.go
+azureuser@Developer1:~$ ls
+go1.22.3.linux-amd64.tar.gz  hello  hello.go
+azureuser@Developer1:~$ ll
+total 69252
+drwxr-xr-x 4 azureuser azureuser     4096 May 20 06:53 ./
+drwxr-xr-x 3 root      root          4096 May 20 06:34 ../
+-rw-r--r-- 1 azureuser azureuser      220 Feb 25  2020 .bash_logout
+-rw-r--r-- 1 azureuser azureuser     3771 Feb 25  2020 .bashrc
+drwx------ 3 azureuser azureuser     4096 May 20 06:53 .cache/
+-rw-r--r-- 1 azureuser azureuser      807 Feb 25  2020 .profile
+drwx------ 2 azureuser azureuser     4096 May 20 06:34 .ssh/
+-rw-r--r-- 1 azureuser azureuser        0 May 20 06:50 .sudo_as_admin_successful
+-rw------- 1 azureuser azureuser      791 May 20 06:53 .viminfo
+-rw-rw-r-- 1 azureuser azureuser      161 May 20 06:47 .wget-hsts
+-rw-rw-r-- 1 azureuser azureuser 68958945 May  7 16:01 go1.22.3.linux-amd64.tar.gz
+-rwxrwxr-x 1 azureuser azureuser  1910598 May 20 06:53 hello*
+-rw-rw-r-- 1 azureuser azureuser       71 May 20 06:53 hello.go
+
+azureuser@Developer1:~$ ls
+
+go1.22.3.linux-amd64.tar.gz  hello  hello.go
+
+azureuser@Developer1:~$ ls -l hello.go
+-rw-rw-r-- 1 azureuser azureuser 71 May 20 06:53 hello.go
+
+azureuser@Developer1:~$ ll hello
+-rwxrwxr-x 1 azureuser azureuser 1910598 May 20 06:53 hello*
+
+
+
+azureuser@Developer1:~$ go help
+Go is a tool for managing Go source code.
+
+Usage:
+
+        go <command> [arguments]
+
+The commands are:
+
+        bug         start a bug report
+        build       compile packages and dependencies
+        clean       remove object files and cached files
+        doc         show documentation for package or symbol
+        env         print Go environment information
+        fix         update packages to use new APIs
+        fmt         gofmt (reformat) package sources
+        generate    generate Go files by processing source
+        get         add dependencies to current module and install them
+        install     compile and install packages and dependencies
+        list        list packages or modules
+        mod         module maintenance
+        work        workspace maintenance
+        run         compile and run Go program
+        test        test packages
+        tool        run specified go tool
+        version     print Go version
+        vet         report likely mistakes in packages
+
+Use "go help <command>" for more information about a command.
+
+Additional help topics:
+
+        buildconstraint build constraints
+        buildmode       build modes
+        c               calling between Go and C
+        cache           build and test caching
+        environment     environment variables
+        filetype        file types
+        go.mod          the go.mod file
+        gopath          GOPATH environment variable
+        goproxy         module proxy protocol
+        importpath      import path syntax
+        modules         modules, module versions, and more
+        module-auth     module authentication using go.sum
+        packages        package lists and patterns
+        private         configuration for downloading non-public code
+        testflag        testing flags
+        testfunc        testing functions
+        vcs             controlling version control with GOVCS
+
+Use "go help <topic>" for more information about that topic.
+
+*************************************************************************************************************************************************
+Day-2 | 21-05-2024 | Tuesday
+==========================
+https://go.dev/
+
+About the Playground
+===================
+
+The Go Playground is a web service that runs on go.dev's servers. The service receives a Go program, vets, compiles, links, and runs the program inside a sandbox, then
+ returns the output.
+
+If the program contains tests or examples and no main function, the service runs the tests. Benchmarks will likely not be supported since the program runs in a sandboxed 
+environment with limited resources.
+
+There are limitations to the programs that can be run in the playground:
+
+The playground can use most of the standard library, with some exceptions. The only communication a playground program has to the outside world is by writing to 
+standard output and standard error.
+
+In the playground the time begins at 2009-11-10 23:00:00 UTC (determining the significance of this date is an exercise for the reader). This makes it easier to cache programs 
+by giving them deterministic output.
+
+There are also limits on execution time and on CPU and memory usage.
+
+The article "Inside the Go Playground" describes how the playground is implemented. The source code is available at https://go.googlesource.com/playground.
+
+The playground uses the latest stable release of Go.
+
+The playground service is used by more than just the official Go project (Go by Example is one other instance) and we are happy for you to use it on your own site. 
+All we ask is that you contact us first (note this is a public mailing list), that you use a unique user agent in your requests (so we can identify you), and that your service is 
+of benefit to the Go community.
+
+Any requests for content removal should be directed to security@golang.org. Please include the URL and the reason for the request.
+
+Reference:
+----------------
+chmod --> file and directory
+chown --> ownership 
+
+https://pkg.go.dev/os#example-Chmod
+
+File Permission:
+===============
+0644
+
+r --> 4
+w --> 2
+x --> 1
+
+U --> User/Owner
+G --> Group
+O --> Ohters
+
+chmod
+----------
+file(s)/directory
+
+chown for ownership
+
+Example:
+-------------
+chmod 777 example.txt
+chmod 766 file1.txt
+chmod -R 777 dir
+
+chown azure:azure dir2
+
+chown admin:admin dir2
+
+Example Azure RHEL:
+====================
+[azureuser@Developer1 ~]$ ll package_dir1/
+total 4
+-rw-rw-r--. 1 azureuser azureuser 606 May 21 06:58 1_file.go
+
+drwxrwxr-x. 2 azureuser azureuser       23 May 21 06:58 package_dir1
+
+[azureuser@Developer1 package_dir1]$ cat /etc/os-release
+NAME="Red Hat Enterprise Linux"
+VERSION="8.7 (Ootpa)"
+
+Create User:
+============
+sudo adduser user1
+
+Create Password for User:
+=======================
+$ sudo passwd dev2
+
+$ sudo chown -R azureuser:azureuser package_dir1
+
+Make:
+=======
+https://pkg.go.dev/builtin#make
+
+
+*************************************************************************************************************************************************
+Day-3 | 21-05-2024 | Tuesday
+==========================
+
+*************************************************************************************************************************************************
+Day-4 | 22-05-2024 | Thursday
+===========================
+Solution-1
+----------------
+How to use method for multiple structs ?
+---
+Using go interface
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Solution2:
+----------------
+_ := p.Option
+ 
+if _ != nil {
+panic("Value not found")
+}
+ 
+
+_ := p.Option     if _ != nil {  panic("Value not found")  }     try this
+
+not works..  
+
+ 
+    _ := p.Options
+    if _ != nil {
+        panic("Value not found")
+    }
+got this error.  cannot use _ as value or type
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Solution-3
+==========
+// JSON Serialization and Deserialization
+
+// This program demonstrates how to serialize a Go structure to JSON and deserialize it back.
+
+   package main
+
+   import (
+       "encoding/json"
+       "fmt"
+   )
+
+   // Define a structure 'Person'
+   type Person struct {
+       FirstName string `json:"first_name"`
+       LastName  string `json:"last_name"`
+       Age       int    `json:"age"`
+   }
+
+   func main() {
+       // Create an instance of 'Person'
+       p := Person{
+           FirstName: "Alice",
+           LastName:  "Smith",
+           Age:       28,
+       }
+
+       // Serialize 'Person' to JSON
+       jsonData, err := json.Marshal(p)
+       if err != nil {
+           fmt.Println("JSON serialization error:", err)
+           return
+       }
+       fmt.Println("Serialization of Data:", jsonData)
+
+       // Deserialize JSON back to 'Person'
+       var newPerson Person
+       err = json.Unmarshal(jsonData, &newPerson)
+       if err != nil {
+           fmt.Println("JSON deserialization error:", err)
+           return
+       }
+
+       // Print the deserialized 'Person'
+       fmt.Println("Deserialized Person:")
+       fmt.Println("First Name:", newPerson.FirstName)
+       fmt.Println("Last Name:", newPerson.LastName)
+       fmt.Println("Age:", newPerson.Age)
+   }
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Q:
+---
+Number of threads is associated to the CPU cores, what happens if i have only one core ?
+
+Issue:
+---------
+PS D:\Skillwise-2024\go-exercise-file-2024\Concurreny> go run .\5_withMutex.go
+Oops in endpoint
+200 status code for https://github.com/
+fatal error: all goroutines are asleep - deadlock!
+
+goroutine 1 [semacquire]:
+sync.runtime_Semacquire(0xc0000080f0?)
+        C:/Program Files/Go/src/runtime/sema.go:62 +0x25
+sync.(*WaitGroup).Wait(0x21373f1ae28?)
+        C:/Program Files/Go/src/sync/waitgroup.go:116 +0x48
+main.main()
+        D:/Skillwise-2024/go-exercise-file-2024/Concurreny/5_withMutex.go:27 +0x135
+
+goroutine 7 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x803400?, 0x40?, 0x5f83b4?)
+        C:/Program Files/Go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0x889680)
+        C:/Program Files/Go/src/sync/mutex.go:171 +0x15d
+sync.(*Mutex).Lock(...)
+        C:/Program Files/Go/src/sync/mutex.go:90
+main.getStatusCode({0x5fc6f1, 0x13})
+        D:/Skillwise-2024/go-exercise-file-2024/Concurreny/5_withMutex.go:41 +0xc5 
+created by main.main in goroutine 1
+        D:/Skillwise-2024/go-exercise-file-2024/Concurreny/5_withMutex.go:23 +0xa5 
+
+goroutine 9 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x803400?, 0xc0?, 0x5f83b4?)
+        C:/Program Files/Go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0x889680)
+        C:/Program Files/Go/src/sync/mutex.go:171 +0x15d
+sync.(*Mutex).Lock(...)
+        C:/Program Files/Go/src/sync/mutex.go:90
+main.getStatusCode({0x5fbb2e, 0x11})
+        D:/Skillwise-2024/go-exercise-file-2024/Concurreny/5_withMutex.go:41 +0xc5
+created by main.main in goroutine 1
+        D:/Skillwise-2024/go-exercise-file-2024/Concurreny/5_withMutex.go:23 +0xa5
+exit status 2
+
+Marshal Issue:
+---------------------
+type ChannelHolder struct {
+    Ch chan int `json:"ch"`
+}
+ 
+func main() {
+    chHolder := ChannelHolder{Ch: make(chan int)}
+    _, err := json.Marshal(chHolder)
+    if err != nil {
+        fmt.Println("Error:", err)
+    }
+}
+
+*************************************************************************************************************************************************
+Day-5 | 24-05-2024 | Friday
+=========================
+func main() {
+    runtime.GOMAXPROCS(1) // Limit the number of OS threads to 1
+
+    go func() {
+        for i := 0; i < 5; i++ {
+            fmt.Println("Goroutine")
+            time.Sleep(100 * time.Millisecond) // Simulate work
+        }
+    }()
+
+    for i := 0; i < 5; i++ {
+        fmt.Println("Main function")
+        time.Sleep(100 * time.Millisecond) // Simulate work
+    }
+}
+
+*************************************************************************************************************************************************
+Day-6 | 27-05-2024 | Monday
+==========================
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Welcome to OS Threads.")
+	for i := 1; i <= 3; i++ {
+		fmt.Println("Main Thread", i)
+	}
+}
+
+Explanation:
+===========
+### OS Threads and Goroutines
+
+- **OS Threads**: In Go, OS threads are the low-level threads provided by the operating system. These threads are capable of executing Go code.
+- **Goroutines**: Goroutines are lightweight, managed by the Go runtime, and run on top of OS threads. They are much cheaper in terms of memory and scheduling cost 
+      compared to OS threads.
+
+### Detailed Explanation in Terms of OS Threads
+1. **Single OS Thread Execution**:
+   - When the Go program starts, the Go runtime allocates at least one OS thread for the execution of Go code.
+   - The `main` function runs on this initial OS thread.
+
+2. **Main Function Execution**:
+   - The execution starts with the `main` function on the initial OS thread.
+   - `fmt.Println("Welcome to OS Threads.")` is executed on the same OS thread.
+   - The for loop runs three iterations, each time calling `fmt.Println("Main Thread", i)` on the same OS thread.
+
+3. **No Additional Goroutines**:
+   - Since this program does not explicitly create any goroutines (using the `go` keyword), all code runs on the initial OS thread allocated to the `main` function.
+
+### Key Points
+- **Concurrency**: This specific program does not use any concurrency features of Go, such as goroutines. It runs sequentially on a single OS thread.
+- **Thread Usage**: The program starts with one OS thread provided by the Go runtime. All code in the `main` function executes on this single OS thread.
+- **Efficiency**: Since there is no concurrency in this program, there is no context switching or overhead associated with managing multiple goroutines or threads.
+
+### Summary
+- The provided Go program runs entirely on a single OS thread.
+- The `main` function and its loop execute sequentially on this initial thread.
+- No additional goroutines or threads are created or managed by the Go runtime for this simple program.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Welcome to Go runtime.")
+	go func() {
+		for i := 1; i <= 3; i++ {
+			fmt.Println("Gorutine1", i)
+		}
+	}()
+
+	for i := 1; i <= 3; i++ {
+		fmt.Println("Main Thread", i)
+	}
+}
+
+Output:
+------------
+Welcome to Go runtime.
+Main Thread 1
+Main Thread 2
+Main Thread 3
+
+### Explanation
+**Starting a Goroutine**:
+
+   go func() {
+   	for i := 1; i <= 3; i++ {
+   		fmt.Println("Goroutine", i)
+   	}
+   }()
+
+- The `go` keyword starts a new goroutine, which is a lightweight, concurrent execution unit managed by the Go runtime.
+- This anonymous function runs concurrently with the main function. The loop inside the goroutine prints "Goroutine1", "Goroutine2", and "Goroutine3".
+
+5. **Main Function Loop**:
+   for i := 1; i <= 3; i++ {
+   	fmt.Println("Main Thread", i)
+   }
+
+- The `main` function continues executing its loop, printing "Main Thread 1", "Main Thread 2", and "Main Thread 3".
+
+### OS Threads and Goroutines
+- **OS Threads**: The Go runtime starts with one OS thread for the `main` function. If additional OS threads are needed (based on `runtime.GOMAXPROCS`), the 
+      Go runtime manages those.
+- **Goroutines**: The `main` function runs in the initial goroutine. The `go` keyword creates a new goroutine for the anonymous function.
+
+### Execution Flow and Concurrency
+- **Initial OS Thread**: The `main` function starts on the initial OS thread.
+- **Goroutine Creation**: When the `go` statement is encountered, the Go runtime schedules the new goroutine to run concurrently with the `main` goroutine. This new 
+       goroutine is managed by the Go scheduler and can run on the same or a different OS thread, depending on the number of available OS threads and `GOMAXPROCS` 
+       setting.
+- **Concurrency**: The two goroutines (main and the new one) run concurrently, meaning they can be interleaved in any order.
+
+### Possible Output
+The output can vary due to the concurrent execution of goroutines. Here are some possible outputs:
+Welcome to Go runtime.
+Main Thread 1
+Main Thread 2
+Main Thread 3
+Goroutine1 1
+Goroutine1 2
+Goroutine1 3
+
+Or it might interleave like:
+
+Welcome to Go runtime.
+Goroutine1 1
+Main Thread 1
+Goroutine1 2
+Main Thread 2
+Goroutine1 3
+Main Thread 3
+
+Or another possible interleaving:
+
+Welcome to Go runtime.
+Main Thread 1
+Goroutine1 1
+Main Thread 2
+Goroutine1 2
+Main Thread 3
+Goroutine1 3
+
+### Key Points
+1. **Main Goroutine**: Executes the code in the `main` function.
+2. **New Goroutine**: Created by the `go` keyword, runs concurrently.
+3. **Scheduler**: The Go runtime scheduler manages these goroutines, switching between them.
+4. **OS Threads**: Goroutines are multiplexed onto available OS threads by the Go scheduler.
+
+### Summary
+- The program prints "Welcome to Go runtime."
+- A new goroutine is started that prints "Goroutine1 1", "Goroutine1 2", and "Goroutine1 3".
+- The main function prints "Main Thread 1", "Main Thread 2", and "Main Thread 3".
+- The actual order of the "Goroutine1" and "Main Thread" prints can vary due to concurrent execution managed by the Go scheduler.
+
+But in my case output is:
+
+Welcome to Go runtime.
+Main Thread 1
+Main Thread 2
+Main Thread 3 
+
+even i tried more than 10 times
+
+The behavior you are observing is due to the nature of goroutines and how the Go scheduler works, especially in simple programs where the main function completes its 
+execution before the newly created goroutine has a chance to run.
+
+Why the Goroutine Might Not Run
+
+In the provided program, the main function starts a new goroutine and then immediately continues to execute its own loop. If the main function finishes before the goroutine
+has a chance to execute, the program will exit, and the goroutine will not run.
+
+This is because the Go runtime terminates the program when the main function returns, regardless of any running goroutines. Since the goroutine is very lightweight and 
+there are no blocking calls in the main function, it can complete before the scheduler has a chance to run the new goroutine.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Welcome to Go runtime.")
+	// go func() {
+	//for i := 1; i <= 3; i++ {
+	go fmt.Println("Gorutine1")
+	//}
+	//}()
+
+	for i := 1; i <= 3; i++ {
+		fmt.Println("Main Thread", i)
+	}
+}
+
+Output:
+=======
+Welcome to Go runtime.
+Main Thread 1
+Main Thread 2
+Main Thread 3
+
+Explanation:
+===========
+In the modified program, you have commented out the loop inside the goroutine and replaced it with a single fmt.Println("Goroutine1") statement. Despite this change, the 
+goroutine might still not run if the main function finishes executing before the goroutine gets a chance to execute. This is because the Go scheduler may not have time to 
+schedule the goroutine before the main function completes and the program exits.
+
+Is this correct in goroutine "go fmt.Println("Gorutine1")" ??
+
+Yes, it is correct to use go fmt.Println("Goroutine1") to start a goroutine that executes the fmt.Println function. However, in the context of your program, even though this 
+statement is syntactically correct, it may not produce the desired output without proper synchronization, because the main function may exit before the goroutine has a 
+chance to run
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	fmt.Println("Welcome to Go runtime.")
+	// go func() {
+	//for i := 1; i <= 3; i++ {
+	go fmt.Println("Gorutine1")
+	//}
+	//}()
+
+	for i := 1; i <= 3; i++ {
+		fmt.Println("Main Thread", i)
+		time.Sleep(100 * time.Millisecond)
+	}
+}
+
+Output:
+=======
+Welcome to Go runtime.
+Main Thread 1
+Gorutine1
+Main Thread 2
+Main Thread 3
+
+Explanation:
+===========
+In the modified program, you've introduced a `time.Sleep` call within the main function's loop. This gives the goroutine a chance to be scheduled and execute before the main function exits. Here's your program:
+
+
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	fmt.Println("Welcome to Go runtime.")
+
+	// Start a new goroutine
+	go fmt.Println("Goroutine1")
+
+	// Main function continues execution
+	for i := 1; i <= 3; i++ {
+		fmt.Println("Main Thread", i)
+		time.Sleep(100 * time.Millisecond)
+	}
+}
+```
+
+### Explanation
+
+1. **Main Function**:
+   - Prints "Welcome to Go runtime."
+   - Starts a new goroutine to print "Goroutine1".
+   - Enters a loop to print "Main Thread 1", "Main Thread 2", and "Main Thread 3", with a `time.Sleep` call in each iteration.
+
+2. **Goroutine**:
+   - The `go fmt.Println("Goroutine1")` starts a new goroutine that prints "Goroutine1".
+   - The `time.Sleep` calls in the main function provide enough delay to allow the goroutine to be scheduled and execute.
+
+### Why the Goroutine Runs This Time
+- **`time.Sleep`**: The `time.Sleep` calls in the main function give the Go scheduler enough time to switch context to the goroutine and run it.
+- **Concurrency**: By introducing a delay, the main function doesn’t complete its execution immediately, allowing the goroutine to execute.
+
+### Expected Output
+
+With the `time.Sleep` calls, you should see an output similar to this:
+
+Welcome to Go runtime.
+Main Thread 1
+Goroutine1
+Main Thread 2
+Main Thread 3
+
+
+### Detailed Explanation of Output
+- The program starts by printing "Welcome to Go runtime."
+- The goroutine is started but not necessarily executed immediately.
+- The main function prints "Main Thread 1" and then sleeps for 100 milliseconds. During this sleep, the Go scheduler can schedule the goroutine to run.
+- The goroutine prints "Goroutine1".
+- The main function continues to print "Main Thread 2" and "Main Thread 3", with each print followed by a 100 millisecond sleep.
+
+### Summary
+- **Goroutine Execution**: The `go fmt.Println("Goroutine1")` starts a new goroutine to print "Goroutine1".
+- **Concurrency Management**: The introduction of `time.Sleep` in the main function allows the Go scheduler to run the goroutine before the main function completes.
+- **Result**: The output shows both the main thread and the goroutine outputs interleaved due to concurrent execution.
+
+This approach of adding `time.Sleep` works for simple demonstration purposes, but for more robust and reliable concurrency handling, you should use synchronization 
+mechanisms like `sync.WaitGroup` or channels.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	fmt.Println("Welcome to Go runtime.")
+	go func() {
+		for i := 1; i <= 3; i++ {
+			fmt.Println("Gorutine", i)
+			time.Sleep(100 * time.Millisecond)
+		}
+	}()
+
+	for i := 1; i <= 3; i++ {
+		fmt.Println("Main Thread", i)
+		time.Sleep(100 * time.Millisecond)
+	}
+}
+
+Output:
+=======
+Welcome to Go runtime.
+Main Thread 1
+Gorutine 1
+Gorutine 2
+Main Thread 2
+Main Thread 3
+Gorutine 3
+
+Why same output still ??
+
+The output order you're seeing is due to the way the Go scheduler handles goroutines. Both the main function and the goroutine are running concurrently, and their 
+execution is interleaved based on the scheduler's timing.
+
+In your program, you have a goroutine and the main function both printing and sleeping for the same duration (100 milliseconds). The exact order of execution can vary 
+because the Go scheduler is non-deterministic. However, with the same sleep duration, you're likely to see a fairly consistent interleaving of output.
+
+Why the Output Appears Interleaved
+---
+Both the main function and the goroutine are sleeping for the same duration, which results in them waking up and executing their next print statements in a staggered 
+manner.
+The scheduler decides which goroutine (including the main one) to run at any given time slice. Because both sleep for the same amount of time, they tend to wake up and 
+execute close to each other.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	// fmt.Println("Welcome to Go runtime.")
+	go fmt.Println("Go runtime")
+	fmt.Printf("Main Tread")
+}
+Output:
+=======
+Main Tread
+
+In your program, the main function may exit before the goroutine has a chance to execute. This is because the Go runtime will terminate the program as soon as the main 
+function completes, regardless of whether there are any goroutines still running.
+
+Specific Reason:
+-----------------------
+In Go, the main function of the main package is the entry point of the program. When the main function exits, the program terminates, even if there are active goroutines. 
+This behavior is designed to keep the program's lifecycle simple and predictable. The Go runtime does not keep the program running to wait for goroutines to finish 
+executing unless the main function itself is waiting for them.
+
+Specific Time To Complete Main Threads
+---------------------------------------------------------
+In Go, there is no specific default time allocated for the main function to complete. The execution of the main function and its completion depend entirely on the code within 
+it. The main function will run to completion based on the instructions it executes, and once it completes, the program will terminate immediately, regardless of any active 
+goroutines
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	func() {
+		fmt.Println("Funtion")
+	}()
+	fmt.Printf("Main Tread")
+}
+
+Output:
+=======
+Funtion
+Main Tread
+
+Same situation with function its printing both statements    
+---
+I see, you're pointing out that despite the fact that the `fmt.Println("Function")` call is wrapped inside an immediately invoked function expression (IIFE), it still prints before 
+"Main Thread". This behavior is indeed expected, and it differs from goroutines.
+
+In Go, when a function is called, it executes synchronously. The execution of the outer function `main()` blocks until the inner anonymous function completes its execution, 
+including the `fmt.Println("Function")` statement. 
+
+Here's a breakdown of your program's behavior:
+---
+1. **Function Execution**: 
+   - The immediately invoked anonymous function is called `(func() { ... })()`.
+   - It executes synchronously, which means the inner `fmt.Println("Function")` statement is executed before proceeding.
+
+2. **Main Thread Printing**: 
+   - After the inner function completes execution, the `main()` function continues with the `fmt.Printf("Main Thread")` statement, printing "Main Thread".
+
+3. **Program Termination**: 
+   - After all statements in the `main()` function have been executed, the program terminates.
+
+This synchronous behavior ensures that the inner function executes and completes before the `main()` function moves on to the next statement. Therefore, "Function" is 
+printed before "Main Thread".
+
+If you wanted to make the behavior more asynchronous, akin to goroutines, you could indeed use goroutines:
+
+
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	go func() {
+		fmt.Println("Function")
+	}()
+	fmt.Println("Main Thread")
+}
+
+With this modification, "Main Thread" would likely be printed before "Function" due to the concurrent execution of the goroutine. However, remember that goroutines come 
+with their own considerations regarding synchronization and control flow.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Question:
+---------------
+How to check cpu core in windows 10, Linux and MacOS via GUI, CMD, Powershell,  ??
+
+Answer:
+-------------
+Checking CPU Cores in Windows 10
+
+1. Using GUI (Task Manager)
+Opent  "Task Manager," 
+Click on the "Performance" tab.
+Select "CPU" on the left sidebar.
+You will see the number of cores and logical processors in the bottom right corner of the window.
+
+2. Using Command Prompt (CMD)
+Open Command Prompt
+wmic cpu get NumberOfCores,NumberOfLogicalProcessors
+
+3. Using PowerShell
+Open PowerShell 
+# To get the number of physical cores
+Get-WmiObject -Class Win32_Processor | Select-Object -Property NumberOfCores
+
+# To get the number of logical processors
+Get-WmiObject -Class Win32_Processor | Select-Object -Property NumberOfLogicalProcessors
+
+
+# Checking CPU Cores in Linux
+
+1. Using Command Line
+**Option 1: `lscpu` Command**
+The `lscpu` command displays information about the CPU architecture.
+lscpu | grep -E '^CPU\(s\)|^Core\(s\) per socket'
+
+
+**Option 2: `/proc/cpuinfo` File**
+You can also check the number of CPU cores by reading the `/proc/cpuinfo` file.
+grep -E '^processor|^core id' /proc/cpuinfo | sort -u
+This command lists each processor and core ID, allowing you to count the unique pairs.
+
+**Option 3: `nproc` Command**
+The `nproc` command directly shows the number of processing units available.
+nproc
+
+**Option 4: `htop` Command**
+If you have `htop` installed, it shows CPU core usage.
+
+htop
+
+# Checking CPU Cores in macOS
+
+1. Using Command Line
+**Option 1: `sysctl` Command**
+The `sysctl` command displays system information.
+sysctl -n hw.ncpu
+This command will return the number of logical processors.
+
+**Option 2: `system_profiler` Command**
+The `system_profiler` command provides detailed information about the hardware and software configuration.
+
+system_profiler SPHardwareDataType | grep "Total Number of Cores"
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+package main
+
+import (
+	"fmt"
+	"runtime"
+)
+
+func main() {
+	fmt.Println("Welcome to GOMAXPROCS...")
+	runtime.GOMAXPROCS(0)
+	for i := 1; i <= 3; i++ { 
+		fmt.Println("Main Thead", i)
+	}
+
+}
+
+Explanation:
+===========
+In your provided Go code, `runtime.GOMAXPROCS(0)` is used. 
+# Explanation of `runtime.GOMAXPROCS(0)`
+- **`runtime.GOMAXPROCS(n int) int`**: This function sets the maximum number of CPUs that can be executing simultaneously and returns the previous setting. If `n` is 0, 
+        it returns the current setting without changing it.
+
+# Your Code Analysis
+Package main
+import (
+    "fmt"
+    "runtime"
+)
+func main() {
+    fmt.Println("Welcome to GOMAXPROCS...")
+
+    // This line retrieves the current value of GOMAXPROCS without changing it
+    currentProcs := runtime.GOMAXPROCS(0)
+    fmt.Printf("Current GOMAXPROCS setting: %d\n", currentProcs)
+
+    // Loop to print some messages
+    for i := 1; i <= 3; i++ {
+        fmt.Println("Main Thread", i)
+    }
+}
+# Output Explanation
+1. **Welcome to GOMAXPROCS...**: This message is printed first.
+2. **Current GOMAXPROCS setting**: The current number of OS threads that can run Go code concurrently is printed.
+3. **Main Thread 1, 2, 3**: These messages are printed in sequence.
+
+# What `runtime.GOMAXPROCS(0)` Does
+- **`runtime.GOMAXPROCS(0)`**: This call retrieves the current setting of GOMAXPROCS without changing it. By default, this is set to the number of logical CPUs available 
+       on the machine. On your Windows laptop with 4 cores and 8 logical processors, it should return 8 (unless you or the environment explicitly changed it).
+
+# Modified Example
+
+Here's the code with improved comments and clarity on what `runtime.GOMAXPROCS(0)` is doing:
+---
+package main
+
+import (
+    "fmt"
+    "runtime"
+)
+
+func main() {
+    fmt.Println("Welcome to GOMAXPROCS...")
+
+    // Retrieve and print the current GOMAXPROCS value
+    currentProcs := runtime.GOMAXPROCS(0)
+    fmt.Printf("Current GOMAXPROCS setting: %d\n", currentProcs)
+
+    // Loop to print some messages
+    for i := 1; i <= 3; i++ {
+        fmt.Println("Main Thread", i)
+    }
+}
+
+	
+### Summary
+- `runtime.GOMAXPROCS(0)` retrieves the current setting of the maximum number of CPUs that can execute Go code simultaneously without changing it.
+- By default, this value is set to the number of logical processors available.
+- In the provided code, `runtime.GOMAXPROCS(0)` will simply print the current setting, and then the loop will print "Main Thread" messages.
+
+This is useful for checking the current concurrency level of your Go program. If you want to change it, you can pass a different value to `runtime.GOMAXPROCS(n)`, where `n` 
+is the number of CPUs you want to allow for concurrent execution.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Question:
+--------------
+As per definition of GOMAXPROCS(1) limited to os threads 1 and it will limit goroutine 1 but in this program when i want to run 6 goroutine then program is working fine my 
+windows laptop have NumberOfCores are and NumberOfLogicalProcessors are 4.
+
+Answer:
+--------------
+The `runtime.GOMAXPROCS` function in Go sets the maximum number of operating system threads that can execute Go code simultaneously. It does not limit the number 
+of goroutines you can run; it only limits how many of those goroutines can be actively executing at the same time.
+
+### Clarification
+1. **Goroutines vs. OS Threads**:
+   - **Goroutines**: Lightweight, user-space threads managed by the Go runtime. You can create thousands or even millions of goroutines.
+   - **OS Threads**: Managed by the operating system. `GOMAXPROCS` controls how many OS threads can run Go code concurrently.
+
+2. **GOMAXPROCS(1)**:
+   - Setting `runtime.GOMAXPROCS(1)` means only one OS thread will be used for executing Go code at any given time. This does not mean that only one goroutine can exist 
+     or that only one goroutine will run; it means that only one goroutine will be running on the CPU at a time. The Go scheduler will still switch between goroutines, but it will 
+     do so on a single OS thread.
+-
+# Example Program
+
+Let's look at an example program to illustrate this:
+
+
+package main
+
+import (
+    "fmt"
+    "runtime"
+    "sync"
+)
+
+func main() {
+    // Limit to 1 OS thread
+    runtime.GOMAXPROCS(1)
+    fmt.Println("GOMAXPROCS set to 1")
+
+    var wg sync.WaitGroup
+    wg.Add(6)
+
+    for i := 1; i <= 6; i++ {
+        go func(id int) {
+            defer wg.Done()
+            fmt.Printf("Goroutine %d is running\n", id)
+        }(i)
+    }
+
+    wg.Wait()
+    fmt.Println("All goroutines finished")
+}
+
+### Explanation of the Example
+
+- **GOMAXPROCS(1)**: This limits the program to using one OS thread for running Go code.
+- **Six Goroutines**: The program starts six goroutines. Each goroutine prints a message indicating it is running.
+
+### What Happens
+
+- **Goroutine Creation**: All six goroutines are created almost simultaneously.
+- **Execution**: With `GOMAXPROCS(1)`, the Go runtime schedules these goroutines on a single OS thread. Only one goroutine can run at any given moment, but the scheduler switches between them quickly.
+- **Concurrency**: The goroutines are executed concurrently, meaning they make progress independently of one another. However, since `GOMAXPROCS` is set to 1, they do not run in parallel; they share the single OS thread, taking turns on the CPU.
+
+### Why It Works
+
+Even though `GOMAXPROCS` is set to 1, the program runs all six goroutines correctly because:
+
+1. **Concurrency**: Go handles concurrency using its scheduler, which can manage many goroutines on a single OS thread by rapidly switching between them.
+2. **Blocking**: If a goroutine blocks (e.g., waiting for I/O), the scheduler can run another goroutine in its place.
+3. **Preemption**: The Go scheduler can preempt long-running goroutines to ensure fair execution of all goroutines, even with a single OS thread.
+
+### Performance Considerations
+
+Setting `GOMAXPROCS` to 1 might not utilize multi-core CPUs efficiently. For CPU-bound tasks, increasing `GOMAXPROCS` to match the number of available CPU cores can improve performance by allowing parallel execution.
+
+### Summary
+
+- **GOMAXPROCS** controls the number of OS threads for executing Go code, not the number of goroutines.
+- Setting `GOMAXPROCS(1)` allows only one goroutine to run at a time, but many goroutines can exist and be scheduled in turn.
+- The Go runtime's scheduler efficiently manages many goroutines on a single OS thread, enabling concurrency without parallelism.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+		fmt.Println("Function")
+	fmt.Println("Main Thread")
+}
+It means two thread manage by os ?? It it true or false.
+
+The statement "It means two threads managed by OS" in the context of your provided code is **false**.
+
+Here is your provided code:
+---
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	fmt.Println("Function")
+	fmt.Println("Main Thread")
+}
+
+
+### Explanation:
+
+1. **Single Goroutine**:
+   - When you run the `main` function in a Go program, it starts as a single goroutine.
+   - The two `fmt.Println` statements within the `main` function are executed sequentially in this single goroutine.
+
+2. **No Additional Goroutines or OS Threads**:
+   - This program does not create any additional goroutines.
+   - Therefore, it does not involve multiple threads or any concurrency.
+   - All the code runs on a single OS thread managed by the Go runtime.
+
+### Threads and Goroutines in Go:
+- **Goroutines**:
+  - Go uses goroutines, which are lightweight managed by the Go runtime.
+  - Goroutines are multiplexed onto OS threads, meaning multiple goroutines can run on fewer OS threads.
+
+- **OS Threads**:
+  - The Go runtime manages a pool of OS threads.
+  - It schedules and runs goroutines on these OS threads.
+
+### Your Code’s Execution:
+1. **Main Goroutine**:
+   - The `main` function runs in the main goroutine.
+   - The `fmt.Println("Function")` statement is executed, printing "Function".
+   - The `fmt.Println("Main Thread")` statement is executed next, printing "Main Thread".
+
+2. **No Concurrency**:
+   - Since no goroutines are created explicitly, there is no concurrent execution.
+   - The program runs entirely on a single OS thread.
+
+### Conclusion:
+In the given code, only one goroutine (the main goroutine) is running, and it uses a single OS thread. There are no additional threads or goroutines created, so the statement 
+that two threads are managed by the OS is false. The entire program runs in a single sequence within the main goroutine on one OS thread.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Question:
+-------------
+Either OS is running theats or CPU.
+
+Answer:
+------------
+CPU
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Question:
+--------------
+What is Go Schedular ?
+
+Answer:
+-------------
+# Go Scheduler
+
+The **Go scheduler** is an integral part of the Go runtime that manages the execution of goroutines. It is responsible for:
+
+1. **Scheduling**: Deciding which goroutine should run on which OS thread (also known as a "worker thread").
+2. **Preemption**: Preempting long-running goroutines to ensure fair distribution of CPU time among all goroutines.
+3. **Concurrency**: Efficiently managing the concurrent execution of many goroutines, even with a limited number of OS threads.
+4. **Context Switching**: Switching between goroutines, which includes saving and restoring the state of goroutines.
+
+The scheduler allows Go to run many goroutines concurrently on a few OS threads by multiplexing them.
+# WaitGroup
+A **WaitGroup** is a synchronization primitive provided by the `sync` package in Go. It is used to wait for a collection of goroutines to finish executing. 
+
+Here is what a `WaitGroup` does:
+1. **Add**: Increment the counter for the number of goroutines to wait for.
+2. **Done**: Decrement the counter when a goroutine completes.
+3. **Wait**: Block until the counter goes back to zero, meaning all goroutines have completed.
+
+# Key Differences
+- **Go Scheduler**: Manages the execution and scheduling of all goroutines in a Go program. It ensures efficient CPU usage and fair execution of goroutines.
+- **WaitGroup**: Synchronizes goroutines, allowing a program to wait for multiple goroutines to complete before proceeding.
+
+# Example the Go scheduler and a `WaitGroup`:
+
+package main
+
+import (
+    "fmt"
+    "sync"
+    "time"
+)
+
+func main() {
+    var wg sync.WaitGroup
+
+    for i := 1; i <= 5; i++ {
+        wg.Add(1)
+        go func(id int) {
+            defer wg.Done()
+            time.Sleep(time.Second) // Simulate work
+            fmt.Printf("Goroutine %d finished\n", id)
+        }(i)
+    }
+
+    wg.Wait() // Wait for all goroutines to finish
+    fmt.Println("All goroutines have completed")
+}
+
+
+In this example:
+- The **Go scheduler** manages the concurrent execution of five goroutines.
+- The **WaitGroup** ensures the main function waits until all goroutines have finished before printing the final message.
+
+# Summary
+- **Go Scheduler**: Responsible for scheduling and managing goroutine execution.
+- **WaitGroup**: Used for synchronizing goroutines to wait for their completion.
+
+They serve different purposes and are both crucial for concurrent programming in Go.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Worker Pools-It creates a pool of worker goroutines to handle a fixed number of jobs, using channels for communication between the main function and the workers
+
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func worker(id int, jobs <-chan int, results chan<- int) {
+	for job := range jobs {
+		fmt.Printf("Worker %d started job %d\n", id, job)
+		// Simulating some work
+		results <- job * 2
+		fmt.Printf("Worker %d finished job %d\n", id, job)
+	}
+}
+
+func main() {
+	numJobs := 5
+	numWorkers := 3
+
+	jobs := make(chan int, numJobs)
+	results := make(chan int, numJobs)
+
+	// Start worker goroutines
+	var wg sync.WaitGroup
+	for w := 1; w <= numWorkers; w++ {
+		wg.Add(1)
+		go func(workerID int) {
+			defer wg.Done()
+			worker(workerID, jobs, results)
+		}(w)
+	}
+
+	// Send jobs to workers
+	for j := 1; j <= numJobs; j++ {
+		jobs <- j
+	}
+	close(jobs)
+
+	// Collect results
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	// Print results
+	for res := range results {
+		fmt.Println("Result:", res)
+	}
+}
+
+Output:
+=======
+Worker 3 started job 3
+Worker 3 finished job 3
+Worker 3 started job 4
+Worker 3 finished job 4
+Worker 3 started job 5
+Worker 3 finished job 5
+Result: 6
+Worker 1 started job 1
+Worker 1 finished job 1
+Result: 8
+Worker 2 started job 2
+Worker 2 finished job 2
+Result: 10
+Result: 2
+Result: 4
+
+### Code Explanation
+
+The provided Go code sets up a worker pool using goroutines to handle jobs concurrently.
+
+#### Key Components:
+
+1. **Worker Function**:
+
+   func worker(id int, jobs <-chan int, results chan<- int) {
+       for job := range jobs {
+           fmt.Printf("Worker %d started job %d\n", id, job)
+           // Simulating some work
+           results <- job * 2
+           fmt.Printf("Worker %d finished job %d\n", id, job)
+       }
+   }
+
+   - The `worker` function is a goroutine that processes jobs from the `jobs` channel and sends results to the `results` channel.
+   - It prints messages when starting and finishing each job.
+
+2. **Main Function**:
+
+   func main() {
+       numJobs := 5
+       numWorkers := 3
+
+       jobs := make(chan int, numJobs)
+       results := make(chan int, numJobs)
+
+       // Start worker goroutines
+       var wg sync.WaitGroup
+       for w := 1; w <= numWorkers; w++ {
+           wg.Add(1)
+           go func(workerID int) {
+               defer wg.Done()
+               worker(workerID, jobs, results)
+           }(w)
+       }
+
+       // Send jobs to workers
+       for j := 1; j <= numJobs; j++ {
+           jobs <- j
+       }
+       close(jobs)
+
+       // Collect results
+       go func() {
+           wg.Wait()
+           close(results)
+       }()
+
+       // Print results
+       for res := range results {
+           fmt.Println("Result:", res)
+       }
+   }
+
+
+   - **Channels**:
+     - `jobs`: A buffered channel to hold job identifiers.
+     - `results`: A buffered channel to hold the results of processed jobs.
+
+   - **Starting Workers**:
+     - Three worker goroutines are started, each running the `worker` function.
+     - A `sync.WaitGroup` is used to ensure the main function waits for all workers to complete.
+
+   - **Sending Jobs**:
+     - Five jobs (integers 1 through 5) are sent to the `jobs` channel.
+     - The `jobs` channel is then closed to signal no more jobs will be sent.
+
+   - **Collecting Results**:
+     - A separate goroutine waits for all workers to finish (using `wg.Wait()`) and then closes the `results` channel.
+     - The main function reads from the `results` channel and prints the results.
+
+### Output Explanation
+
+Worker 3 started job 3
+Worker 3 finished job 3
+Worker 3 started job 4
+Worker 3 finished job 4
+Worker 3 started job 5
+Worker 3 finished job 5
+Result: 6
+Worker 1 started job 1
+Worker 1 finished job 1
+Result: 8
+Worker 2 started job 2
+Worker 2 finished job 2
+Result: 10
+Result: 2
+Result: 4
+
+
+#### Analysis:
+
+1. **Worker Execution Order**:
+   - Worker 3 starts and finishes jobs 3, 4, and 5 consecutively before any other worker starts.
+   - Worker 1 then starts and finishes job 1.
+   - Worker 2 starts and finishes job 2.
+
+2. **Result Collection**:
+   - Results are printed in the order they are placed into the `results` channel, which depends on when the jobs are processed by the workers.
+   - Job 3 (`Result: 6`), Job 4 (`Result: 8`), and Job 5 (`Result: 10`) are processed by Worker 3 first.
+   - Job 1 (`Result: 2`) is processed by Worker 1 next.
+   - Job 2 (`Result: 4`) is processed by Worker 2 last.
+
+### Why This Specific Order?
+
+- **Goroutine Scheduling**: The Go runtime schedules goroutines. In this case, Worker 3 was scheduled to run first and completed multiple jobs before the other workers
+      got a chance to start.
+- **Channel Order**: The order in which results are received from the `results` channel depends on the order in which the workers send their results.
+
+### Conclusion
+The code sets up a worker pool with three workers and five jobs. The goroutines start in the order determined by the Go runtime scheduler. Worker 3 processes multiple jobs 
+before Workers 1 and 2 start, leading to the observed output. Each worker processes its assigned jobs and sends results to the `results` channel, which the main function 
+reads and prints. The order of the worker output and the results may vary on different runs due to the nondeterministic nature of goroutine scheduling.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+In this piece of code :
+	// Start worker goroutines
+	var wg sync.WaitGroup
+	for w := 1; w <= numWorkers; w++ {
+		wg.Add(1)
+		go func(workerID int) {
+			defer wg.Done()
+			worker(workerID, jobs, results)
+		}(w)
+	}
+
+If i want to change 
+// Start worker goroutines
+	var wg sync.WaitGroup
+	for w := 1; w <= numWorkers; w++ {
+		wg.Add(1)
+		go func(w int) {
+			defer wg.Done()
+			worker(w, jobs, results)
+		}(w)
+	}
+
+There is no effect of out any specific reason behind it
+
+In Go, both `workerID int` and `w int` within the goroutine function are parameter names that refer to the loop variable `w`. Changing the parameter name from `workerID` 
+to `w` has no effect on the program's behavior because it doesn't alter the logic or the values being passed to the `worker` function.
+
+Here’s the original code snippet for reference:
+---
+// Start worker goroutines
+var wg sync.WaitGroup
+for w := 1; w <= numWorkers; w++ {
+    wg.Add(1)
+    go func(workerID int) {
+        defer wg.Done()
+        worker(workerID, jobs, results)
+    }(w)
+}
+
+
+### Modified Code:
+---
+// Start worker goroutines
+var wg sync.WaitGroup
+for w := 1; w <= numWorkers; w++ {
+    wg.Add(1)
+    go func(w int) {
+        defer wg.Done()
+        worker(w, jobs, results)
+    }(w)
+}
+
+### Explanation:
+
+1. **Parameter Naming**:
+   - In the original code, the loop variable `w` is passed to the goroutine as `workerID`.
+   - In the modified code, the loop variable `w` is passed to the goroutine as `w`.
+   - In both cases, the goroutine receives the current value of `w` as an argument, and this value is passed to the `worker` function.
+
+2. **Behavior**:
+   - The parameter name inside the anonymous function (i.e., `workerID` or `w`) is local to that function.
+   - The name of the parameter does not affect the behavior of the code as long as it correctly references the passed value.
+
+3. **Functionality**:
+   - In both versions of the code, the `worker` function is called with the value of `w` as its first argument.
+   - The `worker` function then uses this value to identify the worker and process jobs from the `jobs` channel.
+
+### Example to Illustrate:
+
+Both versions are equivalent in their functionality. Here’s how they operate:
+
+- The loop variable `w` ranges from 1 to `numWorkers`.
+- For each value of `w`, a new goroutine is created.
+- The current value of `w` is passed to the anonymous function and then to the `worker` function.
+- The `worker` function uses this value to identify the worker ID.
+
+Since the parameter name inside the goroutine is irrelevant to the outer scope, changing it has no effect on how the value is passed or used.
+
+### Conclusion:
+The reason why there is no effect when changing `workerID` to `w` is that parameter names inside the function are purely local and do not influence the logic or the values 
+passed to the `worker` function. The important part is that the correct value (`w`) is passed to the function, and it is, in both versions. The naming convention inside the 
+anonymous function does not impact the overall behavior of the program.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What is the use of "close(results)"?
+
+In the provided Go code for a worker pool, the `close(results)` function call is crucial for properly terminating the program. It signals that no more values will be sent to the 
+`results` channel, allowing the range loop that reads from the channel to complete. 
+
+Here's the relevant part of the code and a detailed explanation:
+---
+### Code Snippet:
+
+// Collect results
+go func() {
+    wg.Wait()
+    close(results)
+}()
+
+// Print results
+for res := range results {
+    fmt.Println("Result:", res)
+}
+
+
+### Explanation:
+---
+1. **Purpose of `close(results)`**:
+   - **Signaling Completion**: Closing the `results` channel indicates to any receivers that no more data will be sent on this channel. This is important for consumers of the 
+      channel to know when they can stop waiting for new data and terminate cleanly.
+   - **End of Data**: By closing the channel, you ensure that the `for res := range results` loop in the main function will exit once all data has been processed.
+
+2. **How It Works**:
+   - **`wg.Wait()`**: This function call blocks until all worker goroutines have finished processing. Each worker calls `wg.Done()` when it completes its work, decrementing 
+           the wait group's counter.
+   - **`close(results)`**: After `wg.Wait()` unblocks (meaning all workers are done), the `results` channel is closed. This triggers the termination condition for the range loop 
+           that is reading from `results`.
+
+3. **Range Loop on Channel**:
+   - **Reading from Channel**: The range loop `for res := range results` reads values from the `results` channel.
+   - **Exiting the Loop**: When the `results` channel is closed and all values have been received, the range loop will exit automatically. This prevents the loop from waiting 
+          indefinitely for new data.
+
+### Why It’s Necessary:
+Without closing the `results` channel, the range loop in the main function would never know when to stop waiting for new values. This would lead to a deadlock where the 
+main function waits forever for more results that will never come. Closing the channel ensures the program can terminate gracefully.
+
+### Example without `close(results)`:
+---
+If you remove the `close(results)` line, the program would hang indefinitely after processing all jobs because the range loop would keep waiting for more data from the 
+`results` channel.
+
+### Visualizing the Flow:
+---
+1. **Workers Processing Jobs**:
+   - Workers pull jobs from the `jobs` channel, process them, and send results to the `results` channel.
+
+2. **Main Function Collecting Results**:
+   - The main function reads results from the `results` channel and prints them.
+
+3. **Completion Signal**:
+   - Once all jobs are done, `wg.Wait()` ensures all workers have finished.
+   - `close(results)` signals the end of data.
+   - The range loop exits, allowing the program to terminate cleanly.
+
+### Conclusion:
+The `close(results)` call is essential for indicating to the main function that no more results will be sent to the channel. This allows the range loop to complete and the 
+program to exit gracefully, avoiding deadlocks and ensuring all results are processed correctly.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Why we are doing results <- job * 2 ?? Any Specific reason ??
+
+In the provided Go program, the line `results <- job * 2` within the `worker` function is used to simulate some processing or work done by the worker. The operation `job * 2` 
+is arbitrary and serves as a simple example of a task that the worker might perform. 
+
+Here’s a detailed explanation of the purpose and functionality of this line:
+---
+### Explanation
+---
+#### Purpose of `results <- job * 2`
+1. **Simulation of Work**: The expression `job * 2` is a placeholder for any kind of processing. It mimics some work being done on the `job`. In real-world applications, this 
+         could be any computational task, such as data processing, mathematical calculations, or other business logic.
+
+2. **Passing Results**: By performing `results <- job * 2`, the worker sends the result of the processed job back to the `results` channel. This channel is used to collect the 
+        outcomes of all the jobs processed by the workers.
+
+### Example Breakdown
+---
+Here’s a closer look at the relevant part of the program:
+---
+func worker(id int, jobs <-chan int, results chan<- int) {
+    for job := range jobs {
+        fmt.Printf("Worker %d started job %d\n", id, job)
+        // Simulating some work
+        results <- job * 2
+        fmt.Printf("Worker %d finished job %d\n", id, job)
+    }
+}
+
+- **Input Channel (`jobs`)**: This channel provides jobs to the worker. Each job is represented as an integer.
+- **Output Channel (`results`)**: This channel is used by the worker to send back the result of processing a job.
+- **Processing**: The line `results <- job * 2` represents the processing of the job. The result is calculated by multiplying the job value by 2 and then sending this result into 
+       the `results` channel.
+
+### Real-World Scenario
+---
+In a real-world scenario, the work done by the worker could be more complex, such as:
+---
+- **Data Transformation**: Converting data from one format to another.
+- **Mathematical Computations**: Performing complex calculations or simulations.
+- **I/O Operations**: Reading from a file or database, processing the data, and then writing the results somewhere.
+
+### Example with Realistic Task
+---
+Here’s an example where the worker function simulates a more realistic task, such as computing the square of the job value:
+
+func worker(id int, jobs <-chan int, results chan<- int) {
+    for job := range jobs {
+        fmt.Printf("Worker %d started job %d\n", id, job)
+        // Simulating some work: computing the square of the job value
+        results <- job * job
+        fmt.Printf("Worker %d finished job %d\n", id, job)
+    }
+}
+
+In this example, instead of `results <- job * 2`, we have `results <- job * job`, which computes the square of the job value.
+
+### Summary
+---
+The line `results <- job * 2` is used to simulate some kind of processing in the worker function and to send the processed result back through the `results` channel. The 
+specific operation (`job * 2`) is arbitrary and can be replaced with any task that represents the actual work the worker needs to perform. This pattern allows the main 
+function to collect and use the results of concurrent processing performed by multiple workers.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Docker with Go Application:
+---------------------------------------
+Why --rm in this command "docker run --rm concurrency-app"??
+
+The `--rm` flag in the `docker run --rm concurrency-app` command is used to automatically remove the Docker container when it exits. This helps to keep your system clean by
+not leaving stopped containers that consume disk space and clutter the list of Docker containers.
+
+### Detailed Explanation
+---
+When you run a Docker container without the `--rm` flag, the container will remain on your system even after it has stopped. You can see these stopped containers using 
+`docker ps -a`, which lists all containers, including those that are no longer running. These containers take up space on your system and need to be manually removed if they 
+are no longer needed.
+
+By using the `--rm` flag, Docker ensures that the container is automatically removed after it has finished executing. This is particularly useful for containers that run short-lived tasks or development and testing purposes where you don't need to keep the container's state after it has stopped.
+
+### Example Scenario
+---
+Consider you are developing and testing your Go application frequently. Each time you run your application inside a container, you might end up with a stopped container if 
+you don't use the `--rm` flag. Over time, these stopped containers can accumulate and take up space, requiring you to manually clean them up.
+
+Using the `--rm` flag simplifies this by ensuring that each container is removed immediately after it finishes, keeping your Docker environment clean and reducing the need 
+for manual cleanup.
+
+### Example Usage Without `--rm`
+
+docker run concurrency-app
+
+After running this command, you can list all containers including the stopped ones:
+
+docker ps -a
+
+You would see the stopped container listed there, and you would need to remove it manually using:
+
+docker rm <container_id>
+
+### Example Usage With `--rm`
+
+docker run --rm concurrency-app
+
+After running this command, the container will be automatically removed upon exit, and you won't see it listed in `docker ps -a`.
+
+### Summary
+Using the `--rm` flag is a convenient way to manage temporary containers by ensuring they are automatically cleaned up after they finish running. This keeps your Docker 
+environment tidy and reduces the overhead of manual container management.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Fan-out/Fan-in
+
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+// Producer Function: Generates numbers and sends them to an output channel
+
+func producer(nums ...int) <-chan int {
+	out := make(chan int)
+	go func() {
+		defer close(out)
+		for _, n := range nums {
+			out <- n
+		}
+	}()
+	return out
+}
+
+// Square Function: Reads integers from an input channel, squares them, and sends the results to an output channel
+
+func square(in <-chan int) <-chan int {
+	out := make(chan int)
+	go func() {
+		defer close(out)
+		for n := range in {
+			out <- n * n
+		}
+	}()
+	return out
+}
+
+// Merge Function: Combines multiple input channels into a single output channel
+
+func merge(channels ...<-chan int) <-chan int {
+	var wg sync.WaitGroup
+	out := make(chan int)
+
+	mergeFunc := func(c <-chan int) {
+		defer wg.Done()
+		for n := range c {
+			out <- n
+		}
+	}
+
+	wg.Add(len(channels))
+	for _, c := range channels {
+		go mergeFunc(c)
+	}
+
+	go func() {
+		wg.Wait()
+		close(out)
+	}()
+
+	return out
+}
+
+// Main Function: Sets up the pipeline and processes the results
+func main() {
+	nums := []int{1, 2, 3, 4, 5}
+
+	// Fan-out
+	in := producer(nums...)
+	out1 := square(in)
+	out2 := square(in)
+
+	// Fan-in
+	result := merge(out1, out2)
+
+	// Consume merged results
+	for res := range result {
+		fmt.Println(res)
+	}
+}
+
+Output:
+------------
+1
+4
+9
+25
+16
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Azure Application Deployment in MicroSoft Azure
+===========================================
+OS Version:
+-----------------
+azureuser@Developer2:/$ cat /etc/os-release
+NAME="Ubuntu"
+VERSION="20.04.6 LTS (Focal Fossa)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 20.04.6 LTS"
+VERSION_ID="20.04"
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+VERSION_CODENAME=focal
+UBUNTU_CODENAME=focal
+
+OS Architecture(Ubuntu)
+------------------------------------
+azureuser@Developer2:/$ ls
+bin   dev  home  lib32  libx32      media  opt   root  sbin  srv  tmp  var boot  etc  lib   lib64  lost+found  mnt    proc  run   snap  sys  usr
+
+User:
+---------
+azureuser@Developer2:/$ ls /home/
+azureuser
+
+Install Docker:
+--------------------
+sudo apt-get update -y
+
+sudo apt-get install docker -y
+
+sudo apt  install docker.io
+
+Verify Docker
+-------------------
+Docker version 24.0.5, build 24.0.5-0ubuntu1~20.04.1
+
+Start/Stop/Status Docker:
+-------------------------------------
+sudo service docker start 
+
+~$ sudo service docker status
+● docker.service - Docker Application Container Engine
+     Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)
+     Active: active (running) since Mon 2024-05-27 07:12:31 UTC; 2min 3s ago
+TriggeredBy: ● docker.socket
+       Docs: https://docs.docker.com
+   Main PID: 2773 (dockerd)
+      Tasks: 8
+     Memory: 35.9M
+     CGroup: /system.slice/docker.service
+             └─2773 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+
+May 27 07:12:30 Developer2 systemd[1]: Starting Docker Application Container Engine...
+May 27 07:12:30 Developer2 dockerd[2773]: time="2024-05-27T07:12:30.695240638Z" level=info msg="Starting up"
+May 27 07:12:30 Developer2 dockerd[2773]: time="2024-05-27T07:12:30.697076545Z" level=info msg="detected 127.0.0.53 nameserver, assumi>
+May 27 07:12:30 Developer2 dockerd[2773]: time="2024-05-27T07:12:30.830771508Z" level=info msg="Loading containers: start."
+May 27 07:12:31 Developer2 dockerd[2773]: time="2024-05-27T07:12:31.299728524Z" level=info msg="Loading containers: done."
+May 27 07:12:31 Developer2 dockerd[2773]: time="2024-05-27T07:12:31.391496154Z" level=warning msg="Not using native diff for overlay2,>
+May 27 07:12:31 Developer2 dockerd[2773]: time="2024-05-27T07:12:31.392061469Z" level=info msg="Docker daemon" commit="24.0.5-0ubuntu1>
+May 27 07:12:31 Developer2 dockerd[2773]: time="2024-05-27T07:12:31.392314276Z" level=info msg="Daemon has completed initialization"
+May 27 07:12:31 Developer2 dockerd[2773]: time="2024-05-27T07:12:31.460099845Z" level=info msg="API listen on /run/docker.sock"
+May 27 07:12:31 Developer2 systemd[1]: Started Docker Application Container Engine.
+
+Docker Architecture:
+-----------------------------
+cd /var/lib/docker
+
+Issue:
+---------
+azureuser@Developer2:~$ cd /var/lib/docker
+-bash: cd: /var/lib/docker: Permission denied
+azureuser@Developer2:~$ sudo -i
+root@Developer2:~#
+
+Working with Docker Hub:
+-------------------------------------
+https://hub.docker.com/
+
+Docker Information:
+----------------------------
+sudo docker info
+
+azureuser@Developer2:~$ sudo docker info
+Client:
+ Version:    24.0.5
+ Context:    default
+ Debug Mode: false
+
+Server:
+ Containers: 0
+  Running: 0
+  Paused: 0
+  Stopped: 0
+ Images: 0
+ Server Version: 24.0.5
+ Storage Driver: overlay2
+  Backing Filesystem: extfs
+  Supports d_type: true
+  Using metacopy: false
+  Native Overlay Diff: false
+  userxattr: false
+ Logging Driver: json-file
+ Cgroup Driver: cgroupfs
+ Cgroup Version: 1
+ Plugins:
+  Volume: local
+  Network: bridge host ipvlan macvlan null overlay
+  Log: awslogs fluentd gcplogs gelf journald json-file local logentries splunk syslog
+ Swarm: inactive
+ Runtimes: io.containerd.runc.v2 runc
+ Default Runtime: runc
+ Init Binary: docker-init
+ containerd version:
+ runc version:
+ init version:
+ Security Options:
+  apparmor
+  seccomp
+   Profile: builtin
+ Kernel Version: 5.15.0-1064-azure
+ Operating System: Ubuntu 20.04.6 LTS
+ OSType: linux
+ Architecture: x86_64
+ CPUs: 1
+ Total Memory: 844MiB
+ Name: Developer2
+ ID: 0ce980b4-c96d-42ff-b0d3-b564a353862a
+ Docker Root Dir: /var/lib/docker
+ Debug Mode: false
+ Experimental: false
+ Insecure Registries:
+  127.0.0.0/8
+ Live Restore Enabled: false
+
+
+*************************************************************************************************************************************************
+Day-7 | 28-05-2024 | Tuesday
+==========================
+Check Images:
+---------------------
+sudo docker image ls
+REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
+
+Working with Dockerfile:
+------------------------------------
+
+Issue:
+--------
+azureuser@Developer2:~/go-application-console$ sudo docker build -t concurrency-app1 .
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon   5.12kB
+Step 1/7 : FROM golang:1.18-alpine
+ ---> a77f45e5f987
+Step 2/7 : WORKDIR /app
+ ---> Using cache
+ ---> 58929b76230f
+Step 3/7 : COPY go.mod go.sum ./
+ ---> 94c37e170860
+Step 4/7 : RUN go mod download
+ ---> Running in 59516a78e0fe
+go: errors parsing go.mod:
+/app/go.mod:3: invalid go version '1.22.3': must match format 1.23
+The command '/bin/sh -c go mod download' returned a non-zero code: 1
+
+azureuser@Developer2:~/go-application-console$ sudo docker image ls
+REPOSITORY         TAG           IMAGE ID       CREATED              SIZE
+concurrency-app1   latest        29ef17475cb7   About a minute ago   332MB
+<none>             <none>        94c37e170860   2 minutes ago        330MB
+concurrency-app    latest        26425889a1c2   About an hour ago    332MB
+<none>             <none>        b97e2e681702   About an hour ago    330MB
+golang             1.18-alpine   a77f45e5f987   16 months ago        330MB
+
+Public IP Address
+------------------------
+curl ifconfig.io
+
+Get Public IP Address:
+-------------------------------
+Window/MacOS/Linux
+
+http://localhost:8080
+
+Server/Cloud VM
+------------------------
+http://<server-ip-address>:8080
+
+go.sum
+----------
+github.com/sirupsen/logrus v1.4.2 h1:4UM0s3WEDmtmtR0hYbY91uDLaxnB94KpBRFQ+Vs8AKg=
+github.com/sirupsen/logrus v1.4.2/go.mod h1:5WEAJH3i+5g3+p1Y1ICdNDK1P2nXsyxdVE5P1lraAQc=
+golang.org/x/sys v0.0.0-20200413165638-669c56c373c4 h1:8z5dV4zHgS2EysHDzMWZUw8iPfqWbglcycEmjJ5+1WQ=
+golang.org/x/sys v0.0.0-20200413165638-669c56c373c4/go.mod h1:eW7Gh3tkEYS8q5ZDz6n4W5zFWeC6gF3cCgo+Bt1KlMY=
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Fan-out/Fan-in
+
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func producer(nums ...int) <-chan int {
+	out := make(chan int)
+	go func() {
+		defer close(out)
+		for _, n := range nums {
+			out <- n
+		}
+	}()
+	return out
+}
+
+func square(in <-chan int) <-chan int {
+	out := make(chan int)
+	go func() {
+		defer close(out)
+		for n := range in {
+			out <- n * n
+		}
+	}()
+	return out
+}
+
+func merge(channels ...<-chan int) <-chan int {
+	var wg sync.WaitGroup
+	out := make(chan int)
+
+	mergeFunc := func(c <-chan int) {
+		defer wg.Done()
+		for n := range c {
+			out <- n
+		}
+	}
+
+	wg.Add(len(channels))
+	for _, c := range channels {
+		go mergeFunc(c)
+	}
+
+	go func() {
+		wg.Wait()
+		close(out)
+	}()
+
+	return out
+}
+
+func main() {
+	nums := []int{1, 2, 3, 4, 5}
+
+	// Fan-out
+	in := producer(nums...)
+	out1 := square(in)
+	out2 := square(in)
+
+	// Fan-in
+	result := merge(out1, out2)
+
+	// Consume merged results
+	for res := range result {
+		fmt.Println(res)
+	}
+}
+
+Output:
+=======
+4
+1
+9
+16
+25
+
+# Explanation
+---
+This program demonstrates the Fan-out/Fan-in pattern in Go, using goroutines and channels to process data concurrently. 
+
+Here’s a detailed explanation of how the program works, broken down by each function and the main execution flow:
+
+### Functions and Their Roles
+
+1. **Producer Function**
+
+    func producer(nums ...int) <-chan int {
+        out := make(chan int)
+        go func() {
+            defer close(out)
+            for _, n := range nums {
+                out <- n
+            }
+        }()
+        return out
+    }
+
+    - **Purpose**: Generates numbers from a list and sends them to an output channel.
+    - **Operation**: Creates a goroutine that sends each number from the input slice `nums` to the `out` channel and then closes the channel when done.
+
+2. **Square Function**
+    ```go
+    func square(in <-chan int) <-chan int {
+        out := make(chan int)
+        go func() {
+            defer close(out)
+            for n := range in {
+                out <- n * n
+            }
+        }()
+        return out
+    }
+    ```
+    - **Purpose**: Reads integers from an input channel, squares them, and sends the results to an output channel.
+    - **Operation**: Creates a goroutine that reads from the `in` channel, squares each number, sends the result to the `out` channel, and closes the `out` channel when done.
+
+3. **Merge Function**
+    ```go
+    func merge(channels ...<-chan int) <-chan int {
+        var wg sync.WaitGroup
+        out := make(chan int)
+
+        mergeFunc := func(c <-chan int) {
+            defer wg.Done()
+            for n := range c {
+                out <- n
+            }
+        }
+
+        wg.Add(len(channels))
+        for _, c := range channels {
+            go mergeFunc(c)
+        }
+
+        go func() {
+            wg.Wait()
+            close(out)
+        }()
+
+        return out
+    }
+    ```
+    - **Purpose**: Combines multiple input channels into a single output channel.
+    - **Operation**:
+        - Uses a `sync.WaitGroup` to wait for all input channels to be closed.
+        - Launches a goroutine for each input channel that reads from the channel and sends the values to the `out` channel.
+        - When all input channels are closed, the `out` channel is closed.
+
+### Main Function
+
+The main function sets up the pipeline and processes the results:
+
+```go
+func main() {
+    nums := []int{1, 2, 3, 4, 5}
+
+    // Fan-out
+    in := producer(nums...)
+    out1 := square(in)
+    out2 := square(in)
+
+    // Fan-in
+    result := merge(out1, out2)
+
+    // Consume merged results
+    for res := range result {
+        fmt.Println(res)
+    }
+}
+```
+
+- **Fan-out**: The `producer` function sends numbers to the `in` channel. Two separate `square` goroutines (`out1` and `out2`) read from this same `in` channel concurrently and process the numbers (squaring them).
+- **Fan-in**: The `merge` function combines the results from `out1` and `out2` into a single `result` channel.
+- **Consume Results**: The `for` loop reads and prints each value from the `result` channel until it is closed.
+
+### Explanation of Output
+
+Given the input slice `nums := []int{1, 2, 3, 4, 5}`, the output will include each number squared twice, because the `in` channel is read by both `out1` and `out2`.
+
+Expected output:
+```
+1
+1
+4
+4
+9
+9
+16
+16
+25
+25
+```
+
+- Each number from the input slice is squared twice (once by `out1` and once by `out2`).
+- The order of output might vary because of the concurrent nature of the program.
+
+### Important Notes
+
+- **Concurrency**: This program demonstrates concurrent processing by distributing the squaring operation across multiple goroutines.
+- **Synchronization**: The `merge` function ensures that all results are collected before closing the output channel using a `sync.WaitGroup`.
+- **Channel Closure**: Properly closing channels is crucial to avoid deadlocks and ensure that all goroutines terminate correctly.
+
+This pattern is useful for parallelizing independent tasks and combining their results efficiently in Go.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What are difference between list and slice in golang ??
+---
+In Go, the terms "list" and "slice" refer to different concepts. However, "list" is not a built-in data structure in Go, whereas "slice" is a fundamental type in the language. To 
+understand the differences, it's important to clarify what each term typically means in the context of Go and computer science more broadly.
+
+### Slice in Go
+A **slice** in Go is a dynamically-sized, flexible view into the elements of an array. Slices are more powerful and versatile than arrays, as they provide a way to work with 
+sequences of data without having to manage the underlying array directly.
+
+#### Characteristics of Slices:
+1. **Dynamic Size**: Slices can grow and shrink as needed.
+2. **Underlying Array**: A slice is a descriptor of an array segment, with three components: a pointer to the array, the length of the segment, and its capacity.
+3. **Zero Value**: The zero value of a slice is `nil`.
+4. **Reslicing**: Slices can be resliced to create new slices that reference the same underlying array.
+5. **Appending**: Elements can be appended to a slice using the built-in `append` function, which may create a new array if the current one is not large enough.
+6. **Copying**: Slices can be copied using the built-in `copy` function.
+
+#### Example of Slices:
+
+// Creating a slice
+var s []int
+
+// Appending to a slice
+s = append(s, 1, 2, 3)
+
+// Creating a slice with make
+s2 := make([]int, 5) // Creates a slice with length 5 and capacity 5
+
+// Slicing an array
+arr := [5]int{1, 2, 3, 4, 5}
+s3 := arr[1:4] // s3 is a slice referencing elements 2, 3, and 4 of arr
+
+// Copying a slice
+copy(s2, s3)
+
+
+### List in Go
+A **list** is not a built-in type in Go, but it can refer to various data structures that can be implemented in Go, such as linked lists. The Go standard library provides a 
+package `container/list` for implementing doubly linked lists.
+
+#### Characteristics of Lists (Specifically Linked Lists):
+1. **Nodes**: Consist of elements called nodes, where each node contains data and references (or pointers) to the next (and possibly previous) node.
+2. **Dynamic Size**: Lists can grow and shrink dynamically by adding or removing nodes.
+3. **Insertion and Deletion**: Efficient insertion and deletion of elements as compared to arrays and slices.
+
+#### Example of Lists:
+
+import (
+    "container/list"
+    "fmt"
+)
+
+func main() {
+    // Creating a new list
+    l := list.New()
+
+    // Adding elements to the list
+    l.PushBack(1)
+    l.PushBack(2)
+    l.PushBack(3)
+
+    // Iterating over the list
+    for e := l.Front(); e != nil; e = e.Next() {
+        fmt.Println(e.Value)
+    }
+
+    // Removing an element
+    l.Remove(l.Front())
+}
+
+### Key Differences:
+1. **Definition**:
+   - **Slice**: A dynamically-sized, flexible view into the elements of an array.
+   - **List**: Typically refers to linked lists (e.g., `container/list`), but not a built-in Go type.
+
+2. **Use Case**:
+   - **Slice**: Suitable for general-purpose use where dynamic resizing and efficient access are required.
+   - **List**: Suitable for scenarios requiring frequent insertions and deletions where the order of elements matters, and maintaining element order is necessary.
+
+3. **Memory Layout**:
+   - **Slice**: Contiguous block of memory (part of an array).
+   - **List**: Nodes can be scattered in memory, each containing pointers to the next (and possibly previous) node.
+
+4. **Operations**:
+   - **Slice**: Supports indexing, slicing, and appending.
+   - **List**: Supports efficient insertion and deletion but does not support indexing.
+
+5. **Built-in Support**:
+   - **Slice**: Directly supported by the language with syntax and built-in functions.
+   - **List**: Implemented via the `container/list` package or custom implementations.
+
+In summary, slices are built-in, versatile, and efficient for most use cases involving sequential data, while lists (like linked lists) are more specialized and are useful when 
+specific operations on sequences are needed.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What is the meaning of only this line "func producer(nums ...int) <-chan int" ??
+---
+The line func producer(nums ...int) <-chan int defines the signature of a function named producer in Go. 
+
+Let's break down what each part means:
+
+func producer: This declares a function named producer.
+
+nums ...int: This indicates that the producer function takes a variadic parameter named nums, which means it can accept zero or more arguments of type int. In Go, 
+the ... syntax before a type means that the function can be called with any number of arguments of that type, including none.
+
+<-chan int: This indicates that the producer function returns a receive-only channel of type int. In Go, chan int is a bidirectional channel that can both send and receive 
+integers, but <-chan int restricts the direction to only receiving.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What is the meaning of this line "func merge(channels ...<-chan int) <-chan int" .
+---
+The line `func merge(channels ...<-chan int) <-chan int` defines the signature of a function named `merge` in Go. 
+
+1. **`func merge`**:
+   - This declares a function named `merge`.
+
+2. **`channels ...<-chan int`**:
+   - This specifies that the `merge` function takes a variadic number of arguments (`...`) of type `<-chan int`.
+   - `<-chan int` is a receive-only channel of integers. The `<-` before `chan` means the channel can only be used to receive values, not send them.
+   - `channels` is the name of the parameter which is a variadic slice of receive-only integer channels.
+
+3. **`<-chan int`**:
+   - This indicates that the `merge` function returns a receive-only channel of integers.
+   - The function will produce a channel from which you can receive integers.
+
+### Meaning of the Function Signature
+This function signature means that `merge`:
+- Accepts a variadic number of receive-only channels of integers as input.
+- Returns a single receive-only channel of integers.
+
+In summary, the `merge` function is designed to take multiple input channels and combine their outputs into a single output channel, from which the merged results can be 
+received.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+								----- END ----- 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

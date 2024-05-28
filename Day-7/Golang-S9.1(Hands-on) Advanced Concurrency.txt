@@ -1,0 +1,808 @@
+*************************************************************************************************************************************************
+					***** Golang-S9.1(Hands-on) Advanced Concurrency ***** 
+*************************************************************************************************************************************************
+Question:
+--------------
+Number of threads is associated to the CPU cores, what happens if i have only one core ?
+
+//GOMAXPROCS 
+package main
+
+import (
+    "fmt"
+    "runtime"
+    "time"
+)
+
+func main() {
+    runtime.GOMAXPROCS(1) // Limit the number of OS threads to 1
+
+    go func() {
+        for i := 0; i < 5; i++ {
+            fmt.Println("Goroutine")
+            time.Sleep(100 * time.Millisecond) // Simulate work
+        }
+    }()
+
+    for i := 0; i < 5; i++ {
+        fmt.Println("Main function")
+        time.Sleep(100 * time.Millisecond) // Simulate work
+    }
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Main Go Routine Thread
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	for i :=1; i<=3; i++{
+                  fmt.Println("Main Threads")
+}
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Main Thread with GOMAXPROCS()-error
+
+package main
+
+import (
+	"fmt"
+	"runtime"
+)
+
+func main() {
+	fmt.Println("Working with GOMAXPROCS...")
+	runtime.GOMAXPROCS()
+	for i := 1; i <= 3; i++ {
+		fmt.Println("Main Thread", i)
+
+	}
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	fmt.Printf("Working with GOMAXPROCS...")
+	go func() {
+		for i := 1; i <= 3; i++ {
+			fmt.Println("Goroutine1")
+		}
+	}()
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Example the Go scheduler and a `WaitGroup`:
+
+package main
+
+import (
+    "fmt"
+    "sync"
+    "time"
+)
+
+func main() {
+    var wg sync.WaitGroup
+
+    for i := 1; i <= 5; i++ {
+        wg.Add(1)
+        go func(id int) {
+            defer wg.Done()
+            time.Sleep(time.Second) // Simulate work
+            fmt.Printf("Goroutine %d finished\n", id)
+        }(i)
+    }
+
+    wg.Wait() // Wait for all goroutines to finish
+    fmt.Println("All goroutines have completed")
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Worker Pools-It creates a pool of worker goroutines to handle a fixed number of jobs, using channels for communication between the main function and the workers
+
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+// The worker function receives jobs from the jobs channel, processes them, and sends the results to the results channel
+
+func worker(id int, jobs <-chan int, results chan<- int) {
+	for job := range jobs {
+		fmt.Printf("Worker %d started job %d\n", id, job)
+		// Simulating some work
+		results <- job * 2
+		fmt.Printf("Worker %d finished job %d\n", id, job)
+	}
+}
+
+func main() {
+	numJobs := 5
+	numWorkers := 3
+
+	jobs := make(chan int, numJobs)
+	results := make(chan int, numJobs)
+
+	// Start worker goroutines
+	var wg sync.WaitGroup
+	for w := 1; w <= numWorkers; w++ {
+		wg.Add(1)
+		go func(workerID int) {
+			defer wg.Done()
+			worker(workerID, jobs, results)
+		}(w)
+	}
+
+	// Send jobs to workers
+	for j := 1; j <= numJobs; j++ {
+		jobs <- j
+	}
+	close(jobs)
+
+	// Collect results
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	// Print results
+	for res := range results {
+		fmt.Println("Result:", res)
+	}
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Usecase-1: Running a concurrency application with Docker involves containerizing your Go application and then running the container. 
+                   
+1. **Create Your Go Application**:
+---
+   Ensure you have your Go application ready. Let's use your worker pool example as the application:
+
+
+// main.go
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func worker(id int, jobs <-chan int, results chan<- int) {
+	for job := range jobs {
+		fmt.Printf("Worker %d started job %d\n", id, job)
+		// Simulating some work
+		results <- job * 2
+		fmt.Printf("Worker %d finished job %d\n", id, job)
+	}
+}
+
+func main() {
+	numJobs := 5
+	numWorkers := 3
+
+	jobs := make(chan int, numJobs)
+	results := make(chan int, numJobs)
+
+	// Start worker goroutines
+	var wg sync.WaitGroup
+	for w := 1; w <= numWorkers; w++ {
+		wg.Add(1)
+		go func(w int) {
+			defer wg.Done()
+			worker(w, jobs, results)
+		}(w)
+	}
+
+	// Send jobs to workers
+	for j := 1; j <= numJobs; j++ {
+		jobs <- j
+	}
+	close(jobs)
+
+	// Collect results
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	// Print results
+	for res := range results {
+		fmt.Println("Result:", res)
+	}
+}
+
+
+2. **Create a Dockerfile**:
+---
+   Create a `Dockerfile` in the same directory as your Go application:
+
+# Start with the official Golang image
+FROM golang:1.18-alpine
+
+# Set the current working directory inside the container
+WORKDIR /app
+
+# Copy the go.mod and go.sum files first for dependency caching
+COPY go.mod go.sum ./
+
+# Download dependencies
+RUN go mod download
+
+# Copy the rest of the application
+COPY . .
+
+# Build the application
+RUN go build -o /concurrency-app
+
+# Command to run the application
+CMD ["/concurrency-app"]
+
+
+3. **Create a `go.mod` File**:
+   If you don't already have one, initialize a Go module:
+
+go mod init your-module-name
+go mod tidy
+
+
+4. **Build the Docker Image**:
+   Build your Docker image using the `docker build` command:
+
+docker build -t concurrency-app1 .
+
+5. **Run the Docker Container**:
+   Run a container from your image using the `docker run` command:
+
+docker run --rm concurrency-app
+
+
+### Explanation of Dockerfile:
+---
+- **FROM golang:1.18-alpine**: Uses the official Golang image based on Alpine Linux.
+- **WORKDIR /app**: Sets the working directory inside the container to `/app`.
+- **COPY go.mod go.sum ./**: Copies the `go.mod` and `go.sum` files to the working directory for dependency management.
+- **RUN go mod download**: Downloads the Go module dependencies.
+- **COPY . .**: Copies the rest of the application files to the working directory.
+- **RUN go build -o /concurrency-app**: Builds the Go application and outputs the binary to `/concurrency-app`.
+- **CMD ["/concurrency-app"]**: Sets the command to run the application when the container starts.
+
+### Running and Managing Docker Containers:
+
+- **Check Running Containers**:
+
+  docker ps
+
+- **Stop a Container**:
+
+  docker stop <container_id>
+
+
+- **Remove a Container**:
+
+  docker rm <container_id>
+
+- **View Container Logs**:
+
+  docker logs <container_id>
+
+
+### Example Execution:
+---
+Assuming everything is set up correctly, running the `docker run --rm concurrency-app` command should execute your Go concurrency application inside a Docker container, 
+producing output similar to the following:
+
+
+Worker 1 started job 1
+Worker 2 started job 2
+Worker 3 started job 3
+Worker 1 finished job 1
+Worker 1 started job 4
+Worker 2 finished job 2
+Worker 2 started job 5
+Worker 3 finished job 3
+Worker 1 finished job 4
+Worker 2 finished job 5
+Result: 2
+Result: 4
+Result: 6
+Result: 8
+Result: 10
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+This demonstrates how you can containerize and run a Go concurrency application using Docker, allowing for easy deployment and management of the application in a consistent environment.
+To make your Go concurrency application produce output that can be viewed in a web browser, you'll need to set up a basic HTTP server. Here’s a step-by-step guide to 
+modify your application to serve the results over HTTP and run it using Docker.
+
+### Step 1: Modify the Go Application to Serve Results over HTTP
+---
+Update your Go application to use the `net/http` package to serve the results on a web page.
+
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"sync"
+	"time"
+)
+
+func worker(id int, jobs <-chan int, results chan<- int) {
+	for job := range jobs {
+		fmt.Printf("Worker %d started job %d\n", id, job)
+		// Simulating some work
+		time.Sleep(time.Millisecond * 100) // Simulate some processing time
+		results <- job * 2
+		fmt.Printf("Worker %d finished job %d\n", id, job)
+	}
+}
+
+func main() {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		numJobs := 5
+		numWorkers := 3
+
+		jobs := make(chan int, numJobs)
+		results := make(chan int, numJobs)
+
+		// Start worker goroutines
+		var wg sync.WaitGroup
+		for w := 1; w <= numWorkers; w++ {
+			wg.Add(1)
+			go func(w int) {
+				defer wg.Done()
+				worker(w, jobs, results)
+			}(w)
+		}
+
+		// Send jobs to workers
+		for j := 1; j <= numJobs; j++ {
+			jobs <- j
+		}
+		close(jobs)
+
+		// Collect results
+		go func() {
+			wg.Wait()
+			close(results)
+		}()
+
+		// Print results
+		for res := range results {
+			fmt.Fprintf(w, "Result: %d\n", res)
+		}
+	})
+
+	fmt.Println("Starting server on :8080")
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		fmt.Println("Error starting server:", err)
+	}
+}
+
+### Step 2: Update the Dockerfile
+---
+Ensure your `Dockerfile` is set up to build the application and expose the necessary port.
+
+# Start with the official Golang image
+FROM golang:1.18-alpine
+
+# Set the current working directory inside the container
+WORKDIR /app
+
+# Copy the go.mod and go.sum files first for dependency caching
+COPY go.mod go.sum ./
+
+# Download dependencies
+RUN go mod download
+
+# Copy the rest of the application
+COPY . .
+
+# Build the application
+RUN go build -o /concurrency-app
+
+# Expose port 8080
+EXPOSE 8080
+
+# Command to run the application
+CMD ["/concurrency-app"]
+
+### Step 3: Build and Run the Docker Container
+---
+1. **Build the Docker image**:
+
+    docker build -t concurrency-app .
+
+2. **Run the Docker container**:
+
+    docker run -p 8080:8080 --rm concurrency-app
+  
+### Step 4: Access the Application in a Browser
+---
+Open your web browser and navigate to `http://localhost:8080`. You should see the output of the worker pool processing displayed in your browser.
+
+### Summary
+---
+By modifying your Go application to serve results via an HTTP server, you can view the output in a web browser. The Docker container runs the application and maps the 
+container's port to the host's port so that you can access it via `localhost:8080`. This setup allows you to containerize and run a web server application, making the 
+concurrency results accessible through a web interface.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Updated Code:
+=============
+package main
+
+import (
+        "fmt"
+        "net/http"
+        "sync"
+        "time"
+)
+
+func worker( id int, jobs <-chan int, results chan<- int, w http.ResponseWriter) {
+        for job := range jobs {
+                fmt.Fprintf(w, "Worker %d started job %d\n", id, job)
+                // Simulating some work
+                time.Sleep(time.Millisecond * 100) // Simulate some processing time
+                results <- job * 2
+                fmt.Fprintf(w, "Worker %d finished job %d\n", id, job)
+        }
+}
+
+func main() {
+        http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+
+                numJobs := 5
+                numWorkers := 3
+
+                jobs := make(chan int, numJobs)
+                results := make(chan int, numJobs)
+
+                // Start worker goroutines
+                var wg sync.WaitGroup
+                for i := 1; i <= numWorkers; i++ {
+                        wg.Add(1)
+                        go func(i int) {
+                                defer wg.Done()
+                                worker(i, jobs, results, w)
+                        }(i)
+                }
+
+                // Send jobs to workers
+                for j := 1; j <= numJobs; j++ {
+                        jobs <- j
+                }
+                close(jobs)
+
+                // Collect results
+                go func() {
+                        wg.Wait()
+                        close(results)
+                }()
+
+                // Print results
+                for res := range results {
+                        fmt.Fprintf(w, "Result: %d\n", res)
+                }
+        })
+
+        fmt.Println("Starting server on :8080")
+        if err := http.ListenAndServe(":8080", nil); err != nil {
+                fmt.Println("Error starting server:", err)
+        }
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Fan-out/Fan-in
+
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+// Producer Function: Generates numbers and sends them to an output channel
+
+func producer(nums ...int) <-chan int {
+	out := make(chan int)
+	go func() {
+		defer close(out)
+		for _, n := range nums {
+			out <- n
+		}
+	}()
+	return out
+}
+
+// Square Function: Reads integers from an input channel, squares them, and sends the results to an output channel
+
+func square(in <-chan int) <-chan int {
+	out := make(chan int)
+	go func() {
+		defer close(out)
+		for n := range in {
+			out <- n * n
+		}
+	}()
+	return out
+}
+
+// Merge Function: Combines multiple input channels into a single output channel
+
+func merge(channels ...<-chan int) <-chan int {
+	var wg sync.WaitGroup
+	out := make(chan int)
+
+	mergeFunc := func(c <-chan int) {
+		defer wg.Done()
+		for n := range c {
+			out <- n
+		}
+	}
+
+	wg.Add(len(channels))
+	for _, c := range channels {
+		go mergeFunc(c)
+	}
+
+	go func() {
+		wg.Wait()
+		close(out)
+	}()
+
+	return out
+}
+
+// Main Function: Sets up the pipeline and processes the results
+func main() {
+	nums := []int{1, 2, 3, 4, 5}
+
+	// Fan-out
+	in := producer(nums...)
+	out1 := square(in)
+	out2 := square(in)
+
+	// Fan-in
+	result := merge(out1, out2)
+
+	// Consume merged results
+	for res := range result {
+		fmt.Println(res)
+	}
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+// Producer function
+func producer(nums ...int) <-chan int {
+	out := make(chan int)
+	go func() {
+		defer close(out)
+		for _, n := range nums {
+			out <- n
+		}
+	}()
+	return out
+}
+
+// Square function
+func square(in <-chan int) <-chan int {
+	out := make(chan int)
+	go func() {
+		defer close(out)
+		for n := range in {
+			out <- n * n
+		}
+	}()
+	return out
+}
+
+// Tee function to duplicate the input stream
+func tee(in <-chan int) (<-chan int, <-chan int) {
+	out1 := make(chan int)
+	out2 := make(chan int)
+	go func() {
+		defer close(out1)
+		defer close(out2)
+		for n := range in {
+			out1 <- n
+			out2 <- n
+		}
+	}()
+	return out1, out2
+}
+
+// Merge function
+func merge(channels ...<-chan int) <-chan int {
+	var wg sync.WaitGroup
+	out := make(chan int)
+
+	mergeFunc := func(c <-chan int) {
+		defer wg.Done()
+		for n := range c {
+			out <- n
+		}
+	}
+
+	wg.Add(len(channels))
+	for _, c := range channels {
+		go mergeFunc(c)
+	}
+
+	go func() {
+		wg.Wait()
+		close(out)
+	}()
+
+	return out
+}
+
+func main() {
+	nums := []int{1, 2, 3, 4, 5}
+
+	// Fan-out
+	in := producer(nums...)
+	tee1, tee2 := tee(in)
+	out1 := square(tee1)
+	out2 := square(tee2)
+
+	// Fan-in
+	result := merge(out1, out2)
+
+	// Consume merged results
+	for res := range result {
+		fmt.Println(res)
+	}
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Contextual Errors and Context Package : How to use the Context package to handle timeouts and context cancellation, along with contextual errors?
+
+package main
+
+import (
+	"context"
+	"fmt"
+	"time"
+)
+
+func doSomething(ctx context.Context) error {
+	select {
+	case <-time.After(time.Second):
+		fmt.Println("Task completed successfully")
+		return nil
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+}
+
+func main() {
+	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+	defer cancel()
+
+	err := doSomething(ctx)
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
+}
+
+// Example that combines various types of derived contexts:
+package main
+
+import (
+    "context"
+    "fmt"
+    "time"
+)
+
+func main() {
+    // Create a background context
+    ctx := context.Background()
+
+    // Derive a cancellable context
+    ctx, cancel := context.WithCancel(ctx)
+    defer cancel()
+
+    // Derive a timeout context
+    ctx, cancel = context.WithTimeout(ctx, 2*time.Second)
+    defer cancel()
+
+    // Derive a context with a deadline
+    deadline := time.Now().Add(2 * time.Second)
+    ctx, cancel = context.WithDeadline(ctx, deadline)
+    defer cancel()
+
+    // Derive a context with a value
+    ctx = context.WithValue(ctx, "key", "value")
+
+    // Use the context
+    go doWork(ctx)
+
+    // Simulate some work in the main goroutine
+    time.Sleep(3 * time.Second)
+}
+
+func doWork(ctx context.Context) {
+    select {
+    case <-time.After(1 * time.Second):
+        fmt.Println("Work completed")
+    case <-ctx.Done():
+        fmt.Println("Context cancelled:", ctx.Err())
+    }
+
+    // Access the value from the context
+    if v := ctx.Value("key"); v != nil {
+        fmt.Println("Value from context:", v)
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Working with TCP/UDP Sockets
+
+package main
+
+import (
+	"fmt"
+	"net"
+)
+
+func main() {
+	// TCP Server
+	go func() {
+		listener, err := net.Listen("tcp", ":8080")
+		if err != nil {
+			panic(err)
+		}
+		defer listener.Close()
+
+		for {
+			conn, err := listener.Accept()
+			if err != nil {
+				panic(err)
+			}
+
+			go func(c net.Conn) {
+				defer c.Close()
+				fmt.Fprintln(c, "Hello from TCP server!")
+			}(conn)
+		}
+	}()
+
+	// UDP Server
+	go func() {
+		addr, err := net.ResolveUDPAddr("udp", ":8081")
+		if err != nil {
+			panic(err)
+		}
+
+		conn, err := net.ListenUDP("udp", addr)
+		if err != nil {
+			panic(err)
+		}
+		defer conn.Close()
+
+		for {
+			buf := make([]byte, 1024)
+			n, addr, err := conn.ReadFromUDP(buf)
+			if err != nil {
+				panic(err)
+			}
+
+			fmt.Printf("Received UDP message from %s: %s\n", addr, string(buf[:n]))
+		}
+	}()
+
+	select {}
+}
+*************************************************************************************************************************************************
+							***** END ***** 
+*************************************************************************************************************************************************

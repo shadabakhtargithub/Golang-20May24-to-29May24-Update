@@ -1,0 +1,370 @@
+*************************************************************************************************************************************************
+						***** Golang-S11.1(Hands-on) Tooling and Workflow ***** 
+*************************************************************************************************************************************************
+// Go Modules in Depth
+package main
+
+import (
+	"fmt"
+
+	"github.com/go-modules/module-example/v2"
+)
+
+func main() {
+	fmt.Println(module_example.Version())
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Custom Tooling with go generate
+package main
+
+//go:generate go run generator.go
+
+func main() {
+	// Code that uses generated code
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// generator.go
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	fmt.Println("Generated code")
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Code Generation Techniques
+package main
+
+import (
+	"fmt"
+	"text/template"
+	"os"
+)
+
+func main() {
+	type Data struct {
+		Name string
+	}
+
+	data := Data{Name: "John"}
+
+	tmpl := template.Must(template.New("hello").Parse("Hello, {{.Name}}!"))
+	err := tmpl.Execute(os.Stdout, data)
+	if err != nil {
+		panic(err)
+	}
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Continuous Integration/Continuous Deployment (CI/CD) for Go projects
+# .github/workflows/go.yml
+name: Go CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.17'
+
+      - name: Install dependencies
+        run: go mod download
+
+      - name: Build
+        run: go build -v ./...
+
+      - name: Test
+        run: go test -v ./...
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+						------ Advanced Topics in Networking ------ 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Working with TCP/UDP Sockets
+
+package main
+
+import (
+	"fmt"
+	"net"
+)
+
+func main() {
+	// TCP Server
+	go func() {
+		listener, err := net.Listen("tcp", ":8080")
+		if err != nil {
+			panic(err)
+		}
+		defer listener.Close()
+
+		for {
+			conn, err := listener.Accept()
+			if err != nil {
+				panic(err)
+			}
+
+			go func(c net.Conn) {
+				defer c.Close()
+				fmt.Fprintln(c, "Hello from TCP server!")
+			}(conn)
+		}
+	}()
+
+	// UDP Server
+	go func() {
+		addr, err := net.ResolveUDPAddr("udp", ":8081")
+		if err != nil {
+			panic(err)
+		}
+
+		conn, err := net.ListenUDP("udp", addr)
+		if err != nil {
+			panic(err)
+		}
+		defer conn.Close()
+
+		for {
+			buf := make([]byte, 1024)
+			n, addr, err := conn.ReadFromUDP(buf)
+			if err != nil {
+				panic(err)
+			}
+
+			fmt.Printf("Received UDP message from %s: %s\n", addr, string(buf[:n]))
+		}
+	}()
+
+	select {}
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Using the net/http Package in Depth
+package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello, World!")
+	})
+
+	http.ListenAndServe(":8080", nil)
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Building RESTful APIs with Gorilla Mux or chi
+package main
+
+import (
+	"fmt"
+	"net/http"
+
+	"github.com/gorilla/mux"
+)
+
+func main() {
+	r := mux.NewRouter()
+
+	r.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "List of users")
+	}).Methods("GET")
+
+	r.HandleFunc("/users/{id}", func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		id := vars["id"]
+		fmt.Fprintf(w, "User ID: %s", id)
+	}).Methods("GET")
+
+	http.ListenAndServe(":8080", r)
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Securing APIs with JWT or OAuth
+package main
+
+import (
+	"fmt"
+	"net/http"
+
+	"github.com/dgrijalva/jwt-go"
+)
+
+var secretKey = []byte("secret")
+
+func main() {
+	http.HandleFunc("/login", login)
+	http.HandleFunc("/profile", profile)
+
+	http.ListenAndServe(":8080", nil)
+}
+
+func login(w http.ResponseWriter, r *http.Request) {
+	token := jwt.New(jwt.SigningMethodHS256)
+	tokenString, err := token.SignedString(secretKey)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.SetCookie(w, &http.Cookie{
+		Name:  "token",
+		Value: tokenString,
+	})
+	w.Write([]byte("Logged in successfully"))
+}
+
+func profile(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("token")
+	if err != nil {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	tokenString := cookie.Value
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return secretKey, nil
+	})
+	if err != nil {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	if token.Valid {
+		fmt.Fprintf(w, "Welcome to the profile page!")
+	} else {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+						 ------ Advanced Concurrency Patterns ------ 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Context-aware Cancellation
+package main
+
+import (
+	"context"
+	"fmt"
+	"time"
+)
+
+func main() {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	go worker(ctx)
+
+	time.Sleep(3 * time.Second)
+	cancel()
+	fmt.Println("Context cancelled")
+	time.Sleep(1 * time.Second) // Wait for worker to finish
+}
+
+func worker(ctx context.Context) {
+	for {
+		select {
+		case <-ctx.Done():
+			fmt.Println("Worker interrupted")
+			return
+		default:
+			fmt.Println("Working...")
+			time.Sleep(1 * time.Second)
+		}
+	}
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Advanced Channel Usage (Select Statement, Buffered Channels)
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	ch := make(chan int, 3)
+
+	go producer(ch)
+	go consumer(ch)
+
+	time.Sleep(5 * time.Second) // Run for 5 seconds
+}
+
+func producer(ch chan int) {
+	for i := 1; i <= 5; i++ {
+		ch <- i
+		fmt.Println("Produced:", i)
+	}
+	close(ch)
+}
+
+func consumer(ch chan int) {
+	for {
+		select {
+		case num, ok := <-ch:
+			if !ok {
+				fmt.Println("Channel closed")
+				return
+			}
+			fmt.Println("Consumed:", num)
+		default:
+			fmt.Println("Waiting for data...")
+			time.Sleep(1 * time.Second)
+		}
+	}
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Coordination and Synchronization (Mutexes, Atomic Operations)
+package main
+
+import (
+	"fmt"
+	"sync"
+	"sync/atomic"
+)
+
+func main() {
+	var counter int64
+	var mutex sync.Mutex
+
+	var wg sync.WaitGroup
+	for i := 0; i < 1000; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			atomic.AddInt64(&counter, 1)
+			mutex.Lock()
+			counter++
+			mutex.Unlock()
+		}()
+	}
+	wg.Wait()
+
+	fmt.Println("Counter:", counter)
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+								------ END ------ 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
