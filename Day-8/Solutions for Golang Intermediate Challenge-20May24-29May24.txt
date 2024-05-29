@@ -1,0 +1,338 @@
+*************************************************************************************************************************************************
+				***** Solutions for Golang Intermediate Challenge-20May24-29May24 ***** 
+*************************************************************************************************************************************************
+1. Correct Code
+----------------------
+package main
+
+import "fmt"
+
+func main() {
+    fmt.println("Hello, World!")
+}
+
+2. Correct Code
+----------------------
+import "fmt"
+
+func main() {
+    var age int
+    age = 30
+
+    name := "Alice"
+
+    fmt.Printf("Name: %s, Age: %d\n", name, age)
+}
+
+2. Correct Code
+----------------------
+// Using String Data Types
+
+package main
+
+import "fmt"
+
+const loginToken string = "Akhtar"
+
+func main() {
+	// String Data Type
+	var username string = "Shadab"
+	fmt.Println(username)
+	fmt.Printf("Variables Type is: %T \n", username)
+
+	// Boolean Data Type
+	var isloggedin bool = true
+	fmt.Println(isloggedin)
+	fmt.Printf("Variables Type is: %T \n", isloggedin)
+
+	// uint8 Data Type
+	var smallValue uint8 = 255
+	fmt.Println(smallValue)
+	fmt.Printf("Variables Type is: %T \n", smallValue)
+
+	// float32 Data Type
+	var smallValueFloat float32 = 255.3273839736837837
+	fmt.Println(smallValueFloat)
+	fmt.Printf("Variables Type is: %T \n", smallValueFloat)
+
+	// float64 Data Type
+	var bigValueFloat float64 = 255.3273839736837837
+	fmt.Println(bigValueFloat)
+	fmt.Printf("Variables Type is: %T \n", bigValueFloat)
+
+	// Default values and some aliases
+	var anotherVariable int
+	fmt.Println(anotherVariable)
+	fmt.Printf("Variables Type is: %T \n", anotherVariable)
+
+	var anotherVariableString string
+	fmt.Println(anotherVariableString)
+	fmt.Printf("Variables Type is: %T \n", anotherVariableString)
+
+	// implicit Type
+	var website = "skillwise.com"
+	fmt.Println(website)
+	fmt.Printf("Variables Type is: %T \n", website)
+
+	// no var keyword declaration
+	totalUsers := 49736
+	fmt.Println(totalUsers)
+	fmt.Printf("Variables Type is: %T \n", totalUsers)
+
+	fmt.Println(loginToken)
+	fmt.Printf("Variables Type is: %T \n", loginToken)
+
+}
+
+4.  Correct Code
+----------------------
+   import "fmt"
+
+   func main() {
+       i := 0
+       for {
+           fmt.Println(i)
+           i++
+           if i == 7 {
+               break
+           }
+       }
+   }
+
+5.  Correct Code
+------------------------
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
+func main() {
+	fmt.Println("Input Varialbe:")
+	reader := bufio.NewReader(os.Stdin)
+
+	// comma ok // comma err
+	fmt.Println("Enter the rating for travel")
+	input, _ := reader.ReadString('\n')
+
+	fmt.Println("Thanks for rating, ", input)
+
+}
+
+6. Solution for chellenge
+----------------------------------
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+// Producer function: generates numbers from 1 to 100 and sends them to the out channel
+func producer(out chan<- int) {
+	defer close(out)
+	for i := 1; i <= 100; i++ {
+		out <- i
+	}
+}
+
+// Consumer function: reads from the in channel, squares the number, and sends it to the out channel
+func consumer(in <-chan int, out chan<- int, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for num := range in {
+		out <- num * num
+	}
+}
+
+// Aggregator function: reads from the in channel, sums the numbers, and prints the result
+func aggregator(in <-chan int, wg *sync.WaitGroup) {
+	defer wg.Done()
+	sum := 0
+	for num := range in {
+		sum += num
+	}
+	fmt.Println("Final sum of squares:", sum)
+}
+
+func main() {
+	// Channels
+	numbers := make(chan int)
+	squares := make(chan int)
+
+	// WaitGroup to wait for consumers and aggregator
+	var wg sync.WaitGroup
+
+	// Start producer
+	go producer(numbers)
+
+	// Start consumers
+	numConsumers := 5
+	wg.Add(numConsumers)
+	for i := 0; i < numConsumers; i++ {
+		go consumer(numbers, squares, &wg)
+	}
+
+	// Start aggregator
+	wg.Add(1)
+	go aggregator(squares, &wg)
+
+	// Wait for all consumers to finish and close the squares channel
+	go func() {
+		wg.Wait()
+		close(squares)
+	}()
+
+	// Wait for the aggregator to finish
+	wg.Wait()
+}
+
+7. Solution 
+-----------------
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"sync"
+	"time"
+)
+
+// Task function type
+type Task func() int
+
+// Task Generator function: generates a series of tasks
+func generateTasks(numTasks int) <-chan Task {
+	tasks := make(chan Task, numTasks)
+	go func() {
+		defer close(tasks)
+		for i := 0; i < numTasks; i++ {
+			tasks <- func() int {
+				sleepTime := rand.Intn(400) + 100 // Sleep time between 100ms and 500ms
+				time.Sleep(time.Duration(sleepTime) * time.Millisecond)
+				return sleepTime
+			}
+		}
+	}()
+	return tasks
+}
+
+// Worker function: processes tasks and sends results to the results channel
+func worker(id int, tasks <-chan Task, results chan<- int, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for task := range tasks {
+		result := task()
+		fmt.Printf("Worker %d completed task in %d ms\n", id, result)
+		results <- result
+	}
+}
+
+// Aggregator function: collects results and prints the total time taken
+func aggregator(results <-chan int, done chan<- bool) {
+	totalTime := 0
+	for result := range results {
+		totalTime += result
+	}
+	fmt.Printf("Total time taken: %d ms\n", totalTime)
+	done <- true
+}
+
+func main() {
+	rand.Seed(time.Now().UnixNano())
+
+	numTasks := 10
+	numWorkers := 3
+
+	tasks := generateTasks(numTasks)
+	results := make(chan int, numTasks)
+	done := make(chan bool)
+
+	// Start worker pool
+	var wg sync.WaitGroup
+	for i := 1; i <= numWorkers; i++ {
+		wg.Add(1)
+		go worker(i, tasks, results, &wg)
+	}
+
+	// Start aggregator
+	go aggregator(results, done)
+
+	// Wait for all workers to finish and close the results channel
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	// Wait for the aggregator to finish
+	<-done
+}
+
+8. Solution
+----------------
+// Golang program to illustrate the working of the slice components
+package main
+ 
+import "fmt"
+ 
+func main() {
+ 
+    // Creating an array
+    arr := [7]string{"This", "is", "the", "tutorial",
+                         "of", "Go", "language"}
+ 
+    // Display array
+    fmt.Println("Array:", arr)
+ 
+    // Creating a slice
+    myslice := arr[1:6]
+ 
+    // Display slice
+    fmt.Println("Slice:", myslice)
+ 
+    // Display length of the slice
+    fmt.Printf("Length of the slice: %d", len(myslice))
+ 
+    // Display the capacity of the slice
+    fmt.Printf("\nCapacity of the slice: %d", cap(myslice))
+}
+
+9. Solution
+----------------
+// This program demonstrates nested structures by representing a company with employees.
+
+package main
+
+import "fmt"
+
+// Define a structure 'Employee'
+type Employee struct {
+    FirstName string // Employee's first name
+    LastName  string // Employee's last name
+    Age       int    // Employee's age
+}
+
+// Define a structure 'Company' with a slice of employees
+type Company struct {
+    Name      string    // Company's name
+    Employees []Employee // Slice of Employee structures
+}
+
+func main() {
+    // Create instances of 'Employee'
+    emp1 := Employee{"John", "Doe", 30}    // First employee
+    emp2 := Employee{"Alice", "Smith", 25} // Second employee
+
+    // Create an instance of 'Company' with employees
+    company := Company{
+        Name:      "Acme Inc",               // Company name
+        Employees: []Employee{emp1, emp2},   // List of employees
+    }
+
+    // Access and print company name and employee details
+    fmt.Println("Company Name:", company.Name) // Print company name
+    fmt.Println("Employees:")                  // Print employees header
+    for _, emp := range company.Employees {    // Iterate over employees
+        fmt.Printf("  %s %s, Age: %d\n", emp.FirstName, emp.LastName, emp.Age) // Print employee details
+    }
+}

@@ -1,0 +1,24 @@
+*************************************************************************************************************************************************
+					*****  Anwsers Keys for MCQs for Go Programming *****  
+*************************************************************************************************************************************************
+Answers:
+A) .go
+A) go build
+A) var x int
+D) x := 10
+B) for loop
+A) 0 1 2 3 4
+A) func add(x, y int) int { return x + y }
+B) var x []int
+B) type
+B) To delay the execution of a function until the surrounding function returns
+A) nums[0]
+B) To iterate over elements in a slice, array, string, or map
+C) Maps are not thread-safe
+A) Hello World
+B) Goroutines
+C) Returning error values from functions
+C) const x int = 5
+A) Using the import keyword followed by the package name
+A) To exit a loop or switch statement prematurely
+B) go run
