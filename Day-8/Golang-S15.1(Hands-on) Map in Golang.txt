@@ -1,0 +1,116 @@
+************************************************************************************************************************************************
+					***** Golang-S16.1(Hands-on) Map in Golang ***** 
+************************************************************************************************************************************************
+// Create a map with keys of type string and values of type int
+// Add key-value pairs to the map
+// Access values by keys
+// Check if a key exists in the map
+
+package main
+
+import "fmt"
+
+func main() {
+    // Create a map with keys of type string and values of type int
+    m := make(map[string]int)
+
+    // Add key-value pairs to the map
+    m["one"] = 1
+    m["two"] = 2
+
+    // Access values by keys
+    fmt.Println("Value of 'one':", m["one"])
+    fmt.Println("Value of 'two':", m["two"])
+
+    // Check if a key exists in the map
+    if value, exists := m["three"]; exists {
+        fmt.Println("Value of 'three':", value)
+    } else {
+        fmt.Println("'three' does not exist in the map.")
+    }
+}
+
+Description:
+-------------------
+if value, exists := m["three"]; exists {
+
+m["three"]: This part of the code attempts to access the value associated with the key "three" in the map m
+
+If the key exists, it will return the value; otherwise, it will return the zero value for the value type of the map (in this case, zero for int)
+
+value, exists :=: Here, you're using a short variable declaration to create two variables, value and exists
+
+value is assigned the value associated with the key "three" in the map (or zero value if the key doesn't exist
+
+exists is assigned a boolean value that indicates whether the key "three" exists in the map. If the key exists, exists will be true; otherwise, it will be false
+
+Output:
+------------
+Welcome to Map in Golang
+Value of 'One' 1
+Value of 'Two' 2
+Value is not present in Map
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+Create Map
+Insert Value
+Access Value
+Check Value Availablility
+Delete Specific Value
+*/
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Welcome to Map in Golang")
+	// Create, Declear and Initalize Map
+	m := make(map[string]int)
+
+	// Insert Value in Map
+	m["One"] = 13
+	m["Two"] = 23
+	m["Three"] = 33
+	m["Four"] = 43
+	m["Five"] = 53
+
+	// Access Values
+	fmt.Println(m["One"], m["Two"], m["Three"], m["Four"], m["Five"])
+
+	value, exits := m["Six"]
+	if exits {
+		fmt.Println("Value is:", value)
+	} else {
+		fmt.Println("Value does not exits in Map")
+	}
+
+	// Delete Value
+	fmt.Println("Before deletion value,", m["Three"])
+	delete(m, "Three")
+
+	value, exits = m["Three"]
+	if exits {
+		fmt.Println("Value is:", value)
+	} else {
+		fmt.Println("Value does not exits in Map")
+	}
+
+}
+
+
+Output:
+------------
+Welcome to Map in Golang
+13 23 33 43 53
+Value does not exits in Map
+Before deletion value, 33
+Value does not exits in Map
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+							----------- END ----------- 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+

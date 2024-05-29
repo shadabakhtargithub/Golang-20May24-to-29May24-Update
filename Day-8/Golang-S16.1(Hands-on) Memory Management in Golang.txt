@@ -1,0 +1,98 @@
+************************************************************************************************************************************************
+					***** Golang-S15.1(Hands-on) Memory Management in Golang ***** 
+************************************************************************************************************************************************
+/* Here's an example in Go that demonstrates some aspects of memory management,
+including automatic garbage collection, `defer` for clean-up, and memory safety */
+
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func main() {
+	// Create and open a file
+	file, err := os.Create("example.txt")
+
+                  // Error Handling
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	defer file.Close() // Ensure the file is closed when the function exits
+
+	// Write data to the file
+	data := []byte("Hello, Go!")
+	_, err = file.Write(data)
+
+                  // Error Handling
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	// Slice and map data structures manage memory for you
+	slice := []int{1, 2, 3}
+	m := make(map[string]int)
+	m["one"] = 1
+
+	// Memory safety: No null pointers
+	var ptr *int
+	if ptr != nil {
+		fmt.Println(*ptr)
+	} else {
+		fmt.Println("ptr is nil")
+	}
+
+	// Automatic garbage collection
+	// The variables 'slice' and 'm' will be automatically collected when they are no longer referenced.
+
+	// Using 'defer' for clean-up
+	// 'file.Close()' will be called when the function exits, ensuring that the file is properly closed.
+
+	fmt.Println("My Slice:", slice)
+	fmt.Println("Program completed.")
+}
+
+In this example:
+
+1. A file is created and opened using `os.Create`. The `defer` statement ensures that the file is closed when the function exits, even if an error occurs.
+
+2. Data is written to the file.
+
+3. Memory-managed data structures like slices and maps are used. They automatically allocate and release memory as needed.
+
+4. Memory safety is demonstrated by checking for a nil pointer (`ptr`) before attempting to access its value.
+
+5. The Go runtime's garbage collector automatically reclaims memory when variables are no longer referenced. In this case, `slice` and `m` will be collected when the 
+    function exits.
+
+_, err = file.Write(data)
+
+you're using the underscore (_) to ignore or discard the result of the Write function call
+
+you indicate that you're not interested in the return value of Write, which is the number of bytes written
+
+The underscore is a special identifier in Go that allows you to discard values that you don't intend to use
+
+file.Write(data) writes the content of the data slice to the file represented by the file variable
+
+The line m := make(map[string]int) is used to create a new map in Go
+
+It allocates memory for a map with keys of type string and values of type int
+
+make: The make function in Go is used to create slices, maps, and channels. In this case, you're using it to create a map
+
+map[string]int: This specifies the type of keys and values for the map. In your case, you're creating a map where keys are of type string and values are of type int. The syntax 
+is map[keyType]valueType
+
+
+
+
+Output:
+-------------
+ptr is nil
+My Slice: [1 2 3] 
+Program completed.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,111 @@
+************************************************************************************************************************************************
+						***** Golang-S17.1(Hands-on) Pointer in Golang ***** 
+************************************************************************************************************************************************
+/ *
+Declare Variable and Pointer
+Assign the address of 'number' to pointer
+Defreference the pointer to access the value
+Modify the value through the pointer
+* /
+
+package main
+
+import "fmt"
+
+func main() {
+    // Declare a variable and a pointer
+    number := 42
+    var ptr *int
+
+    // Assign the address of 'number' to the pointer
+    ptr = &number
+
+    // Dereference the pointer to access the value
+    value := *ptr
+
+    fmt.Println("Value:", value)   // Prints: Value: 42
+    fmt.Println("Pointer:", ptr)  // Prints: Pointer: 0xc0000100a0 (memory address)
+
+    // Modify the value through the pointer
+    *ptr = 100
+    fmt.Println("Modified Value:", number) // Prints: Modified Value: 100
+}
+
+Output
+--------------
+Value: 42
+Pointer: 0xc00000a0b8
+Modified Value: 100
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//  Passing a Pointer to a Function
+
+package main
+
+import "fmt"
+
+func modifyValue(ptr *int) {
+    // Modify the value pointed to by 'ptr'
+    *ptr = 200
+}
+
+func main() {
+    number := 42
+    modifyValue(&number) // Pass a pointer to the function
+    fmt.Println("Modified Value:", number) // Prints: Modified Value: 200
+}
+
+Output:
+--------------
+Modified Value: 200
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Returning a Pointer from a Function
+
+package main
+
+import "fmt"
+
+func createPointer() *int {
+    number := 42
+    return &number
+}
+
+func main() {
+    ptr := createPointer() // Receive a pointer from the function
+    fmt.Println("Value from Pointer:", *ptr) // Prints: Value from Pointer: 42
+}
+
+Output:
+-------------
+Value from Pointer: 42
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//  Pointer to Struct
+
+package main
+
+import "fmt"
+
+type Person struct {
+    Name string
+    Age  int
+}
+
+func main() {
+    // Create a struct and a pointer to the struct
+    person := Person{"Alice", 30}
+    var ptr *Person
+
+    // Assign the address of the struct to the pointer
+    ptr = &person
+
+    // Access fields through the pointer
+    fmt.Printf("Name: %s, Age: %d\n", ptr.Name, ptr.Age) // Prints: Name: Alice, Age: 30
+}
+
+Output:
+--------------
+Name: Alice, Age: 30
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+							--------------- END --------------- 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

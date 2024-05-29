@@ -1,0 +1,96 @@
+*************************************************************************************************************************************************
+				***** Golang-S14.1(Hands-on) Methods and Interfaces in Go Programming ***** 
+*************************************************************************************************************************************************
+What is a method in Go programming?
+------------------------------------------------------
+Here's a simple example of a method defined for a custom type in Go:
+
+package main
+
+import "fmt"
+
+type Circle struct {
+    Radius float64
+}
+
+// Method to calculate the area of a Circle
+func (c Circle) Area() float64 {
+    return 3.14 * c.Radius * c.Radius
+}
+
+func main() {
+    circle := Circle{Radius: 5}
+    area := circle.Area()
+    fmt.Printf("Area of the circle: %.2f\n", area)
+}
+In this example, we define a Circle struct type with a Radius field. We then define a method named Area that calculates and returns the area of a circle based on its radius. 
+The Area method is associated with the Circle type, and it operates on instances of Circle. When we call the Area method on a Circle instance in the main function, it 
+calculates the area and returns the result.
+
+Methods in Go provide a way to encapsulate behavior and logic related to specific types, promoting code organization and maintainability. They are commonly used with 
+custom-defined types, such as structs, to define behaviors that are relevant to those types.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What is an interface in Go programming?
+---------------------------------------------------------
+Here's a basic example of an interface definition and implementation:
+
+package main
+
+import (
+	"fmt"
+)
+
+// Define an interface named Shape
+type Shape interface {
+	Area() float64
+}
+
+// Define a struct type Circle
+type Circle struct {
+	Radius float64
+}
+
+// Implement the Area method for Circle
+func (c Circle) Area() float64 {
+	return 3.14 * c.Radius * c.Radius
+}
+
+// Define a struct type Rectangle
+type Rectangle struct {
+	Width  float64
+	Height float64
+}
+
+// Implement the Area method for Rectangle
+func (r Rectangle) Area() float64 {
+	return r.Width * r.Height
+}
+
+func main() {
+	circle := Circle{Radius: 5}
+	rectangle := Rectangle{Width: 4, Height: 6}
+
+	shapes := []Shape{circle, rectangle}
+
+	for _, shape := range shapes {
+		area := shape.Area()
+		fmt.Printf("Shape Area: %.2f\n", area)
+	}
+}
+In this example:
+
+We define an interface named Shape, which specifies a single method Area() float64.
+
+We create two custom types, Circle and Rectangle, each of which implements the Area method.
+
+In the main function, we create instances of both Circle and Rectangle and store them in a slice of Shape.
+
+We loop through the shapes slice and call the Area method on each shape. The Area method called depends on the type of shape (Circle or Rectangle) without explicitly 
+checking the type. This demonstrates polymorphism through interfaces.
+
+Interfaces in Go are widely used to achieve abstraction, write more flexible and reusable code, and implement design patterns such as the strategy pattern and dependency 
+injection. They are a fundamental part of Go's type system and allow for effective composition and decoupling of code.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Method declaration syntax in Go programming:
+------------------------------------------------------------------
+
